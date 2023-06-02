@@ -1,8 +1,9 @@
 package me.ilyaselaissi.linechatapi.controller;
 
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
+import me.ilyaselaissi.linechatapi.dto.UserResponseDTO;
 import me.ilyaselaissi.linechatapi.model.User;
-import me.ilyaselaissi.linechatapi.service.User.UserService;
+import me.ilyaselaissi.linechatapi.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/api/v1/account")
 public class AccountController {
 
     UserService userService;
@@ -20,7 +21,7 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserResponseDTO> register(@RequestBody UserDTO userDTO) {
         if (userDTO == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -28,7 +29,17 @@ public class AccountController {
         if (user == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        UserResponseDTO userResponseDTO = new UserResponseDTO(
+                user.getUsername(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getUserStatus().getStatusType(),
+                user.getLastActive().toString(),
+                user.getCreatedAt().toString(),
+                user.getAvatar(),
+                user.isEmailVerified()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
 
 }

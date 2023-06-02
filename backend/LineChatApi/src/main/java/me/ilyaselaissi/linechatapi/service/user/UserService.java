@@ -1,4 +1,4 @@
-package me.ilyaselaissi.linechatapi.service.User;
+package me.ilyaselaissi.linechatapi.service.user;
 
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
 import me.ilyaselaissi.linechatapi.model.User;
