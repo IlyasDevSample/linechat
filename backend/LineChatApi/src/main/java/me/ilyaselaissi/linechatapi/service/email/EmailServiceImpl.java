@@ -1,6 +1,7 @@
 package me.ilyaselaissi.linechatapi.service.email;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
+
+    @Value("${app.base-url}")
+    private String BASE_URL;
 
     public EmailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -20,12 +24,14 @@ public class EmailServiceImpl implements EmailService {
         message.setFrom("noreplay@linechat.chat");
         message.setTo(email);
         message.setSubject("Email Confirmation");
-        message.setText("Please confirm your email address by clicking the link: " + token);
+        message.setText("Please confirm your email address by clicking the link: "
+                + BASE_URL + "/api/v1/account/confirm-email?token=" + token
+        );
         try {
             mailSender.send(message);
             log.info("Email sent to: " + email);
         } catch (Exception e) {
-            log.error("Error sending email to: " + email);
+            log.error("Error sending email to: " + email + " " + e.getMessage());
         }
     }
 }
