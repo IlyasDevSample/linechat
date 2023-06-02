@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 public class MessageStatusInitializer {
-    MessageStatusRepository messageStatusRepository;
+    private final MessageStatusRepository messageStatusRepository;
 
     public MessageStatusInitializer(MessageStatusRepository messageStatusRepository) {
         this.messageStatusRepository = messageStatusRepository;
