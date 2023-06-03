@@ -1,5 +1,6 @@
 package me.ilyaselaissi.linechatapi.controller;
 
+import me.ilyaselaissi.linechatapi.dto.ResendConfirmationEmail;
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
 import me.ilyaselaissi.linechatapi.dto.UserResponseDTO;
 import me.ilyaselaissi.linechatapi.model.User;
@@ -62,6 +63,18 @@ public class AccountController {
         Map<String, String> response = new HashMap<>();
         response.put("status", "success");
         response.put("message", "Email confirmed successfully");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/resend-confirmation-email")
+    public ResponseEntity<Map<String, String>> resendConfirmationEmail(@RequestBody ResendConfirmationEmail confirmationEmail) {
+        if (confirmationEmail == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        userService.resendConfirmationEmail(confirmationEmail.username());
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Confirmation email sent successfully");
         return ResponseEntity.ok(response);
     }
 

@@ -17,9 +17,9 @@ import me.ilyaselaissi.linechatapi.repository.TokenRepository;
 import me.ilyaselaissi.linechatapi.repository.UserRepository;
 import me.ilyaselaissi.linechatapi.repository.UserStatusRepository;
 import me.ilyaselaissi.linechatapi.util.TokenGenerator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Service
@@ -30,19 +30,22 @@ public class UserServiceImpl implements UserService {
     private final EmailEventPublisher emailEventPublisher;
     private final PermissionRepository permissionRepository;
     private final TokenRepository tokenRepository;
+    PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
             UserStatusRepository userStatusRepository,
             EmailEventPublisher emailEventPublisher,
             PermissionRepository permissionRepository,
-            TokenRepository tokenRepository
+            TokenRepository tokenRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
         this.userStatusRepository = userStatusRepository;
         this.emailEventPublisher = emailEventPublisher;
         this.permissionRepository = permissionRepository;
         this.tokenRepository = tokenRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(userDTO.username());
         // encrypt password before saving it to database
-        String encryptedPassword = userDTO.password(); // TODO: encrypt password
+        String encryptedPassword = passwordEncoder.encode(userDTO.password());
         user.setPassword(encryptedPassword);
         // adding User permissions to user
         Permission permission = permissionRepository.findByName(PermissionNames.ROLE_USER);
@@ -76,27 +79,12 @@ public class UserServiceImpl implements UserService {
         //  save user to database
         try {
             User savedUser = userRepository.save(user);
-            //  publish event
-            EmailEvent emailEvent = new EmailEvent();
-            emailEvent.setRecipient(savedUser.getEmail());
-            // Generate token
-            String token = TokenGenerator.generateEmailConfirmationToken();
-            emailEvent.setToken(token);
-            emailEventPublisher.publishEmailEvent(emailEvent);
-            //  save token to database
-            Token emailConfirmationToken = new Token();
-            emailConfirmationToken.setTokenValue(token);
-            emailConfirmationToken.setUser(savedUser);
-            emailConfirmationToken.setTokenType(TokenGenerator.EMAIL_CONFIRMATION_TOKEN_TYPE);
-            emailConfirmationToken.setExpiryDate(new java.sql.Timestamp(System.currentTimeMillis() + 24 * 60 * 60 * 1000));// 24 hours
-            tokenRepository.save(emailConfirmationToken);
+            SendEmailWithTokenAndSaveToUser(savedUser);
             return savedUser;
         }
         catch (Exception e) {
             throw new InvalidUserException("Invalid user");
         }
-
-
     }
 
     private void validateField(String fieldValue, String fieldName) {
@@ -123,6 +111,9 @@ public class UserServiceImpl implements UserService {
         if (!emailConfirmationToken.getTokenType().equals(TokenGenerator.EMAIL_CONFIRMATION_TOKEN_TYPE)) {
             throw new InvalidTokenException("Invalid token");
         }
+        if (emailConfirmationToken.getUser().isEmailVerified()){
+            throw new InvalidTokenException("User email already verified");
+        }
         //  get user from token
         User user = emailConfirmationToken.getUser();
         //  set user email verified to true
@@ -132,6 +123,40 @@ public class UserServiceImpl implements UserService {
         //  set token to used
         emailConfirmationToken.setUsed(true);
         //  save token to database
+        tokenRepository.save(emailConfirmationToken);
+    }
+
+    @Override
+    public void resendConfirmationEmail(String username) {
+        //  check if user exists in database
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new InvalidUserException("Invalid user");
+        }
+        //  check if user email is verified
+        if (user.isEmailVerified()) {
+            throw new InvalidUserException("User Email already verified");
+        }
+        //  check if user email is enabled
+        if (!user.isEnable()) {
+            throw new InvalidUserException("User is disabled");
+        }
+        SendEmailWithTokenAndSaveToUser(user);
+    }
+
+    private void SendEmailWithTokenAndSaveToUser(User user) {
+        //  publish event
+        EmailEvent emailEvent = new EmailEvent();
+        emailEvent.setRecipient(user.getEmail());
+        // Generate token
+        String token = TokenGenerator.generateEmailConfirmationToken();
+        emailEvent.setToken(token);
+        emailEventPublisher.publishEmailEvent(emailEvent);
+        Token emailConfirmationToken = new Token();
+        emailConfirmationToken.setTokenValue(token);
+        emailConfirmationToken.setUser(user);
+        emailConfirmationToken.setTokenType(TokenGenerator.EMAIL_CONFIRMATION_TOKEN_TYPE);
+        emailConfirmationToken.setExpiryDate(new java.sql.Timestamp(System.currentTimeMillis() + 24 * 60 * 60 * 1000));// 24 hours
         tokenRepository.save(emailConfirmationToken);
     }
 }

@@ -7,4 +7,6 @@ public interface UserService {
     User register(UserDTO userDTO);
 
     void confirmEmail(String token);
+
+    void resendConfirmationEmail(String username);
 }
