@@ -120,6 +120,9 @@ public class UserServiceImpl implements UserService {
         if (emailConfirmationToken.isUsed()) {
             throw new InvalidTokenException("Token already used");
         }
+        if (!emailConfirmationToken.getTokenType().equals(TokenGenerator.EMAIL_CONFIRMATION_TOKEN_TYPE)) {
+            throw new InvalidTokenException("Invalid token");
+        }
         //  get user from token
         User user = emailConfirmationToken.getUser();
         //  set user email verified to true
