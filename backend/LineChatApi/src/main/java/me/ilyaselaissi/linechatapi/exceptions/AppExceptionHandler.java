@@ -1,5 +1,6 @@
 package me.ilyaselaissi.linechatapi.exceptions;
 
+import me.ilyaselaissi.linechatapi.dto.StatusResponseDTO;
 import me.ilyaselaissi.linechatapi.exceptions.token.InvalidTokenException;
 import me.ilyaselaissi.linechatapi.exceptions.user.DuplicateUserException;
 import me.ilyaselaissi.linechatapi.exceptions.user.InvalidUserException;
@@ -25,11 +26,9 @@ public class AppExceptionHandler {
     }
 
     @ExceptionHandler(value = {InvalidTokenException.class})
-    public ResponseEntity<Map<String, String>> handleInvalidTokenException(Exception e) {
-        Map<String, String> response = Map.of(
-                "status", "error",
-                "message", e.getMessage()
-        );
-        return ResponseEntity.badRequest().body(response);
+    public ResponseEntity<StatusResponseDTO> handleInvalidTokenException(Exception e) {
+        StatusResponseDTO statusResponseDTO =
+                new StatusResponseDTO("error", e.getMessage());
+        return ResponseEntity.badRequest().body(statusResponseDTO);
     }
 }
