@@ -32,6 +32,8 @@ public class Token {
     @Column(name = "expiry_date")
     private Date expiryDate;
 
+    private boolean used = false;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;

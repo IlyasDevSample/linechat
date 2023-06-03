@@ -5,4 +5,6 @@ import me.ilyaselaissi.linechatapi.model.User;
 
 public interface UserService {
     User register(UserDTO userDTO);
+
+    void confirmEmail(String token);
 }

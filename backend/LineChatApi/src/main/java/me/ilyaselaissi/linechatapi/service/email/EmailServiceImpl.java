@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
-    @Value("${app.base-url}")
-    private String BASE_URL;
+    @Value("${app.frontend-url}")
+    private String FRONTEND_URL;
 
     public EmailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
         message.setTo(email);
         message.setSubject("Email Confirmation");
         message.setText("Please confirm your email address by clicking the link: "
-                + BASE_URL + "/api/v1/account/confirm-email?token=" + token
+                + FRONTEND_URL + "confirm-email?token=" + token
         );
         try {
             mailSender.send(message);

@@ -5,6 +5,7 @@ import me.ilyaselaissi.linechatapi.common.UserStatusNames;
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
 import me.ilyaselaissi.linechatapi.event.EmailEvent;
 import me.ilyaselaissi.linechatapi.event.EmailEventPublisher;
+import me.ilyaselaissi.linechatapi.exceptions.token.InvalidTokenException;
 import me.ilyaselaissi.linechatapi.exceptions.user.DuplicateUserException;
 import me.ilyaselaissi.linechatapi.exceptions.user.InvalidUserException;
 import me.ilyaselaissi.linechatapi.model.Permission;
@@ -102,5 +103,32 @@ public class UserServiceImpl implements UserService {
         if (fieldValue == null || fieldValue.isEmpty()) {
             throw new InvalidUserException(fieldName + " is required");
         }
+    }
+
+    @Override
+    public void confirmEmail(String token) {
+        //  check if token exists in database
+        Token emailConfirmationToken = tokenRepository.findByTokenValue(token);
+        if (emailConfirmationToken == null) {
+            throw new InvalidTokenException("Invalid token");
+        }
+        //  check if token is expired
+        if (emailConfirmationToken.getExpiryDate().before(new java.sql.Timestamp(System.currentTimeMillis()))) {
+            throw new InvalidTokenException("Token expired");
+        }
+        //  check if token is used
+        if (emailConfirmationToken.isUsed()) {
+            throw new InvalidTokenException("Token already used");
+        }
+        //  get user from token
+        User user = emailConfirmationToken.getUser();
+        //  set user email verified to true
+        user.setEmailVerified(true);
+        //  save user to database
+        userRepository.save(user);
+        //  set token to used
+        emailConfirmationToken.setUsed(true);
+        //  save token to database
+        tokenRepository.save(emailConfirmationToken);
     }
 }
