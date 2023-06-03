@@ -2,6 +2,7 @@ package me.ilyaselaissi.linechatapi.service.user;
 
 import me.ilyaselaissi.linechatapi.common.PermissionNames;
 import me.ilyaselaissi.linechatapi.common.UserStatusNames;
+import me.ilyaselaissi.linechatapi.dto.ChangePasswordDTO;
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
 import me.ilyaselaissi.linechatapi.event.EmailEvent;
 import me.ilyaselaissi.linechatapi.event.EmailEventPublisher;
@@ -144,9 +145,47 @@ public class UserServiceImpl implements UserService {
         SendEmailWithTokenAndSaveToUser(user);
     }
 
+    @Override
+    public void changePassword(ChangePasswordDTO changePasswordDTO) {
+        //  validate user fields
+        validateField(changePasswordDTO.username(), "Username");
+        validateField(changePasswordDTO.oldPassword(), "Old password");
+        validateField(changePasswordDTO.newPassword(), "New password");
+        //  check if user exists in database
+        User user = userRepository.findByUsername(changePasswordDTO.username());
+        if (user == null) {
+            throw new InvalidUserException("Invalid user");
+        }
+        //  check if user email is verified
+        if (!user.isEmailVerified()) {
+            throw new InvalidUserException("User Email not verified");
+        }
+        //  check if user email is enabled
+        if (!user.isEnable()) {
+            throw new InvalidUserException("User is disabled");
+        }
+        //  check if old password is correct
+        if (!passwordEncoder.matches(changePasswordDTO.oldPassword(), user.getPassword())) {
+            throw new InvalidUserException("Invalid old password");
+        }
+        //  change password
+        user.setPassword(passwordEncoder.encode(changePasswordDTO.newPassword()));
+        //  save user to database
+        try {
+            userRepository.save(user);
+        }catch (Exception e){
+            throw new InvalidUserException("Invalid user");
+        }
+        EmailEvent emailEvent = new EmailEvent();
+        emailEvent.setSubject(EmailEvent.CHANGE_USER_PASSWORD);
+        emailEvent.setRecipient(user.getEmail());
+        emailEventPublisher.publishEmailEvent(emailEvent);
+    }
+
     private void SendEmailWithTokenAndSaveToUser(User user) {
         //  publish event
         EmailEvent emailEvent = new EmailEvent();
+        emailEvent.setSubject(EmailEvent.CONFIRMATION_EMAIL);
         emailEvent.setRecipient(user.getEmail());
         // Generate token
         String token = TokenGenerator.generateEmailConfirmationToken();

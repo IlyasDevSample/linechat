@@ -1,5 +1,6 @@
 package me.ilyaselaissi.linechatapi.service.user;
 
+import me.ilyaselaissi.linechatapi.dto.ChangePasswordDTO;
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
 import me.ilyaselaissi.linechatapi.model.User;
 
@@ -9,4 +10,6 @@ public interface UserService {
     void confirmEmail(String token);
 
     void resendConfirmationEmail(String username);
+
+    void changePassword(ChangePasswordDTO changePasswordDTO);
 }

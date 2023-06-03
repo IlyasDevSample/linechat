@@ -62,4 +62,40 @@ public class EmailServiceImpl implements EmailService {
             log.error("Error sending email to: " + email + " " + e.getMessage());
         }
     }
+
+    @Override
+    public void sendChangePasswordEmail(String recipient) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom("noreply@linechat.chat");
+            helper.setTo(recipient);
+            helper.setSubject("LineChat - your password has been changed successfully");
+
+            // Create the HTML content
+            String htmlContent = "<html>"
+                    + "<head>"
+                    + "<style>"
+                    + "h1 { color: #333; }"
+                    + "p { color: #666; }"
+                    + "a { color: #007bff; text-decoration: none; }"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<h1>LineChat</h1>"
+                    + "<p>Your password has been changed successfully.</p>"
+                    + "<p>If you did not change your password, please contact us immediately.</p>"
+                    + "</body>"
+                    + "</html>";
+            helper.setText(htmlContent, true);
+            // Set the Date
+            helper.setSentDate(new Date());
+            mailSender.send(message);
+            log.info("Email sent to: " + recipient);
+
+        }catch (Exception e) {
+            log.error("Error sending email to: " + recipient + " " + e.getMessage());
+        }
+    }
 }

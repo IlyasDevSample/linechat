@@ -10,6 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailEvent {
+    public static final String CONFIRMATION_EMAIL = "Confirmation Email";
+    public static final String CHANGE_USER_PASSWORD= "Change User Password";
     private String recipient;
     private String token;
+    private String subject;
+    private String message;
 }
