@@ -8,9 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1/account")
 public class AccountController {
@@ -49,7 +46,7 @@ public class AccountController {
         if (token == null) {
             // If the token is invalid, return an error response
             StatusResponseDTO statusResponseDTO =
-                    new StatusResponseDTO("error", "Invalid token");
+                    new StatusResponseDTO("error", "please provide a valid token");
             return ResponseEntity.badRequest().body(statusResponseDTO);
 
         }

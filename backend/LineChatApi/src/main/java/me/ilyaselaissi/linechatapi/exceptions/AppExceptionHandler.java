@@ -21,8 +21,10 @@ public class AppExceptionHandler {
     private String FRONTEND_URL;
 
     @ExceptionHandler(value = {InvalidUserException.class, DuplicateUserException.class})
-    public ResponseEntity<String> handleInvalidUserException(Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<StatusResponseDTO> handleInvalidUserException(Exception e) {
+        StatusResponseDTO statusResponseDTO =
+                new StatusResponseDTO("error", e.getMessage());
+        return ResponseEntity.badRequest().body(statusResponseDTO);
     }
 
     @ExceptionHandler(value = {InvalidTokenException.class})
