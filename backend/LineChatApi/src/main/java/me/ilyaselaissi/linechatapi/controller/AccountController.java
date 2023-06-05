@@ -79,4 +79,26 @@ public class AccountController {
         return ResponseEntity.ok(statusResponseDTO);
     }
 
+    @GetMapping("/forgot-password")
+    public ResponseEntity<StatusResponseDTO> forgotPassword(@RequestParam String email) {
+        if (email == null) {
+            return ResponseEntity.badRequest().build();
+        }
+//        userService.forgotPassword(email);
+        StatusResponseDTO statusResponseDTO =
+                new StatusResponseDTO("success", "Password reset email sent successfully");
+        return ResponseEntity.ok(statusResponseDTO);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<StatusResponseDTO> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        if (resetPasswordDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+//        userService.resetPassword(resetPasswordDTO);
+        StatusResponseDTO statusResponseDTO =
+                new StatusResponseDTO("success", "Password has been reset successfully");
+        return ResponseEntity.ok(statusResponseDTO);
+    }
+
 }

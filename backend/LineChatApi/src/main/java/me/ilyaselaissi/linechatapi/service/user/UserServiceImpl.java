@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
         emailEvent.setSubject(EmailEvent.CONFIRMATION_EMAIL);
         emailEvent.setRecipient(user.getEmail());
         // Generate token
-        String token = TokenGenerator.generateEmailConfirmationToken();
+        String token = TokenGenerator.generateRandomStringToken();
         emailEvent.setToken(token);
         emailEventPublisher.publishEmailEvent(emailEvent);
         Token emailConfirmationToken = new Token();
