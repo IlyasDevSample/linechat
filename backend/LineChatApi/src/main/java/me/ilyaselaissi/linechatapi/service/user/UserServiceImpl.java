@@ -3,6 +3,7 @@ package me.ilyaselaissi.linechatapi.service.user;
 import me.ilyaselaissi.linechatapi.common.PermissionNames;
 import me.ilyaselaissi.linechatapi.common.UserStatusNames;
 import me.ilyaselaissi.linechatapi.dto.ChangePasswordDTO;
+import me.ilyaselaissi.linechatapi.dto.ResetPasswordDTO;
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
 import me.ilyaselaissi.linechatapi.event.EmailEvent;
 import me.ilyaselaissi.linechatapi.event.EmailEventPublisher;
@@ -88,30 +89,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void validateField(String fieldValue, String fieldName) {
-        if (fieldValue == null || fieldValue.isEmpty()) {
-            throw new InvalidUserException(fieldName + " is required");
-        }
-    }
+
 
     @Override
     public void confirmEmail(String token) {
         //  check if token exists in database
         Token emailConfirmationToken = tokenRepository.findByTokenValue(token);
-        if (emailConfirmationToken == null) {
-            throw new InvalidTokenException("Invalid token");
-        }
-        //  check if token is expired
-        if (emailConfirmationToken.getExpiryDate().before(new java.sql.Timestamp(System.currentTimeMillis()))) {
-            throw new InvalidTokenException("Token expired");
-        }
-        //  check if token is used
-        if (emailConfirmationToken.isUsed()) {
-            throw new InvalidTokenException("Token already used");
-        }
-        if (!emailConfirmationToken.getTokenType().equals(TokenGenerator.EMAIL_CONFIRMATION_TOKEN_TYPE)) {
-            throw new InvalidTokenException("Invalid token");
-        }
+        validateToken(emailConfirmationToken, TokenGenerator.EMAIL_CONFIRMATION_TOKEN_TYPE);
         if (emailConfirmationToken.getUser().isEmailVerified()){
             throw new InvalidTokenException("User email already verified");
         }
@@ -182,6 +166,63 @@ public class UserServiceImpl implements UserService {
         emailEventPublisher.publishEmailEvent(emailEvent);
     }
 
+    @Override
+    public void forgotPassword(String email) {
+        // check if user exists in database
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new InvalidUserException("Invalid user email");
+        }
+        //  check if user email is verified
+        if (!user.isEmailVerified()) {
+            throw new InvalidUserException("User Email not verified");
+        }
+        //  check if user is enabled
+        if (!user.isEnable()) {
+            throw new InvalidUserException("User is disabled");
+        }
+        //  publish event
+        EmailEvent emailEvent = new EmailEvent();
+        emailEvent.setRecipient(user.getEmail());
+        emailEvent.setSubject(EmailEvent.FORGOT_PASSWORD_EMAIL);
+        // Generate token
+        String token = TokenGenerator.generateRandomStringToken();
+        emailEvent.setToken(token);
+        emailEventPublisher.publishEmailEvent(emailEvent);
+        Token forgotPasswordToken = new Token();
+        forgotPasswordToken.setTokenValue(token);
+        forgotPasswordToken.setUser(user);
+        forgotPasswordToken.setTokenType(TokenGenerator.PASSWORD_RESET_TOKEN_TYPE);
+        // set token expiry date to 10 minutes
+        forgotPasswordToken.setExpiryDate(new java.sql.Timestamp(System.currentTimeMillis() + 10 * 60 * 1000));// 10 minutes
+        tokenRepository.save(forgotPasswordToken);
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        // validate user fields
+        validateField(resetPasswordDTO.password(), "Password");
+        validateField(resetPasswordDTO.token(), "Token");
+        //  check if token exists in database
+        Token forgotPasswordToken = tokenRepository.findByTokenValue(resetPasswordDTO.token());
+        //  check if token is valid
+        validateToken(forgotPasswordToken, TokenGenerator.PASSWORD_RESET_TOKEN_TYPE);
+        // set token to used
+        forgotPasswordToken.setUsed(true);
+        //  save token to database
+        tokenRepository.save(forgotPasswordToken);
+        //  get user from token
+        User user = forgotPasswordToken.getUser();
+        //  set user password
+        user.setPassword(passwordEncoder.encode(resetPasswordDTO.password()));
+        //  save user to database
+        userRepository.save(user);
+        EmailEvent emailEvent = new EmailEvent();
+        emailEvent.setSubject(EmailEvent.CHANGE_USER_PASSWORD);
+        emailEvent.setRecipient(user.getEmail());
+        emailEventPublisher.publishEmailEvent(emailEvent);
+    }
+
     private void SendEmailWithTokenAndSaveToUser(User user) {
         //  publish event
         EmailEvent emailEvent = new EmailEvent();
@@ -197,5 +238,30 @@ public class UserServiceImpl implements UserService {
         emailConfirmationToken.setTokenType(TokenGenerator.EMAIL_CONFIRMATION_TOKEN_TYPE);
         emailConfirmationToken.setExpiryDate(new java.sql.Timestamp(System.currentTimeMillis() + 24 * 60 * 60 * 1000));// 24 hours
         tokenRepository.save(emailConfirmationToken);
+    }
+
+    private void validateField(String fieldValue, String fieldName) {
+        if (fieldValue == null || fieldValue.isEmpty()) {
+            throw new InvalidUserException(fieldName + " is required");
+        }
+    }
+
+    private void validateToken(Token token, String tokenType) {
+
+        if (token == null) {
+            throw new InvalidTokenException("Invalid token");
+        }
+        //  check if token is expired
+        if (token.getExpiryDate().before(new java.sql.Timestamp(System.currentTimeMillis()))) {
+            throw new InvalidTokenException("Token expired");
+        }
+        //  check if token is used
+        if (token.isUsed()) {
+            throw new InvalidTokenException("Token already used");
+        }
+        //  check if token type is correct
+        if (!token.getTokenType().equals(tokenType)) {
+            throw new InvalidTokenException("Invalid token type");
+        }
     }
 }

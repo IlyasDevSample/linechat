@@ -12,6 +12,7 @@ import lombok.Setter;
 public class EmailEvent {
     public static final String CONFIRMATION_EMAIL = "Confirmation Email";
     public static final String CHANGE_USER_PASSWORD= "Change User Password";
+    public static final String FORGOT_PASSWORD_EMAIL = "Forgot Password";
     private String recipient;
     private String token;
     private String subject;

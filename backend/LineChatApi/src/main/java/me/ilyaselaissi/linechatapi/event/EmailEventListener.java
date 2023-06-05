@@ -18,6 +18,9 @@ public class EmailEventListener {
         } else if (emailEvent.getSubject().equals(EmailEvent.CHANGE_USER_PASSWORD)) {
             emailService.sendChangePasswordEmail(emailEvent.getRecipient());
         }
+        else if (emailEvent.getSubject().equals(EmailEvent.FORGOT_PASSWORD_EMAIL)) {
+            emailService.sendForgotPasswordEmail(emailEvent.getRecipient(), emailEvent.getToken());
+        }
 
     }
 }

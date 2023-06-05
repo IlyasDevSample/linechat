@@ -84,7 +84,7 @@ public class AccountController {
         if (email == null) {
             return ResponseEntity.badRequest().build();
         }
-//        userService.forgotPassword(email);
+        userService.forgotPassword(email);
         StatusResponseDTO statusResponseDTO =
                 new StatusResponseDTO("success", "Password reset email sent successfully");
         return ResponseEntity.ok(statusResponseDTO);
@@ -95,7 +95,7 @@ public class AccountController {
         if (resetPasswordDTO == null) {
             return ResponseEntity.badRequest().build();
         }
-//        userService.resetPassword(resetPasswordDTO);
+        userService.resetPassword(resetPasswordDTO);
         StatusResponseDTO statusResponseDTO =
                 new StatusResponseDTO("success", "Password has been reset successfully");
         return ResponseEntity.ok(statusResponseDTO);
