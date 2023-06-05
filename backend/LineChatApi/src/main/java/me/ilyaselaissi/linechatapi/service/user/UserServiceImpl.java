@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final EmailEventPublisher emailEventPublisher;
     private final PermissionRepository permissionRepository;
     private final TokenRepository tokenRepository;
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
