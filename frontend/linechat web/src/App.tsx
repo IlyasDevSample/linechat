@@ -1,10 +1,17 @@
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom' 
+import Index from './pages/Index'
+import Dashboard from './pages/Dashboard'
 
+const router = createBrowserRouter(createRoutesFromElements(
+  <Route path="/">
+    <Route index element={<Index />} />
+    <Route path="dashboard" element={<Dashboard />} />
+  </Route>,
+))
 
 const App = () => {
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline text-red-400" >Hello, world!</h1>
-    </div>
+    <RouterProvider router={router} />
   )
 }
 
