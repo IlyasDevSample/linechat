@@ -36,6 +36,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtSecretKey))
+                .addFilterBefore(new JwtAuthorizationFilter(userRepository, jwtSecretKey), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/account/**").permitAll()
                 .anyRequest().authenticated()
@@ -47,11 +49,10 @@ public class SecurityConfig {
                 })
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setStatus(401);
-                    response.getWriter().write("Unauthorized");
+                    response.getWriter().write("Unauthorized Access");
                 })
-                .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtSecretKey))
-                .addFilterBefore(new JwtAuthorizationFilter(userRepository, jwtSecretKey), UsernamePasswordAuthenticationFilter.class)
+
+
         ;
         return http.build();
     }
