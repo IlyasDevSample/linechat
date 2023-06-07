@@ -4,12 +4,14 @@ import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
+import ForgotPassword from './pages/ForgotPassword'
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/">
     <Route index element={<Index />} />
     <Route path='login' element={<Login />} />
     <Route path='register' element={<Register />}/>
+    <Route path='forgot-password' element={<ForgotPassword />}/>
     <Route path="dashboard" element={<Dashboard />} />ù
     <Route path="404" element={<NotFound/>} />
     <Route path="*" element={<Navigate to="/404" />} />
