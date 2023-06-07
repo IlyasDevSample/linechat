@@ -1,13 +1,24 @@
 import useTitle from '../hooks/useTitle'
 import logo from '../assets/linechat_logo.png'
 import { Link } from 'react-router-dom'
-import { AiOutlineUser, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import { AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail } from 'react-icons/ai'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
+type FormValues = {
+  email: string
+  password: string
+  remember: boolean
+}
 
 const Login = () => {
   useTitle()
   const [showPassword, setShowPassword] = useState(true)
+  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
+
+  const onSubmit = (data: FormValues) => {
+    console.log("form data", data)
+  }
 
 
   return (
@@ -23,6 +34,8 @@ const Login = () => {
           >Sign in to continue to LineChat</p>
         </div>
         <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
           className='max-w-[450px] m-auto mt-[1.5rem] bg-white p-[2.5rem]'
         >
           <div className='w-full'>
@@ -31,16 +44,26 @@ const Login = () => {
               className='flex items-center'
             >
               <div className='bg-primary h-[42px] w-[47px] mt-[0.5rem] flex justify-center items-center border border-gray-300 rounded-sm border-r-0 rounded-r-none'>
-                <AiOutlineUser className="text-gray-500" />
+                <AiOutlineMail className="text-gray-500" />
               </div>
               <input
                 type="email"
-                name="email"
+                {...register('email', {
+                  required: {
+                    value: true,
+                    message: 'Email is required'
+                  },
+                  pattern: {
+                    value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                    message: 'Invalid email address'
+                  }
+                })}
                 id="email"
                 placeholder='Enter Email'
-                className='flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none focus:outline-none placeholder:text-sm'
+                className={'flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none placeholder:text-sm outline-none' + (errors.email ? 'outline outline-3 outline-red-300' : '')}
               />
             </div>
+            {errors.email && <span className='text-sm text-red-400'>{errors.email.message}</span>}
           </div>
           <div>
             <div
@@ -55,10 +78,19 @@ const Login = () => {
               </div>
               <input
                 type={showPassword ? 'password' : 'text'}
-                name="password"
+                {...register('password', {
+                  required: {
+                    value: true,
+                    message: 'Password is required'
+                  },
+                  minLength: {
+                    value: 8,
+                    message: 'Password must be at least 8 characters'
+                  },
+                })}
                 id="password"
                 placeholder='Enter Password'
-                className='flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none focus:outline-none placeholder:text-sm'
+                className={'flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none placeholder:text-sm outline-none' + (errors.password ? 'outline outline-3 outline-red-300' : '')}
               />
               <span
                 className='absolute right-3 top-1/2 transform -translate-y-1/4 cursor-pointer text-xl'
@@ -67,13 +99,14 @@ const Login = () => {
                 {showPassword ? <AiOutlineEye className='text-gray-500 ' /> : <AiOutlineEyeInvisible className='text-gray-500' />}
               </span>
             </div>
+            {errors.password && <span className='text-sm text-red-400'>{errors.password.message}</span>}
           </div>
 
           <div className='mt-[1.5rem] w-fit'>
             <label htmlFor="remember" className='flex items-center'>
               <input
                 type="checkbox"
-                name="remember"
+                {...register('remember')}
                 id="remember"
                 className="checkbox"
                 tabIndex={-1}
