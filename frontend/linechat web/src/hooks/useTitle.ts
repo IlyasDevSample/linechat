@@ -1,13 +1,17 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-function useTitle() {
+function useTitle(customTitle?: string) {
   const location = useLocation();
 
   useEffect(() => {
+    if (customTitle) {
+      document.title = customTitle + ' | LineChat';
+      return;
+    }
     document.title = getTitleFromPathname(location.pathname) || 'LineChat';
   }
-    , [location]);
+    , [location, customTitle]);
 }
 
 function getTitleFromPathname(pathname: string) {
