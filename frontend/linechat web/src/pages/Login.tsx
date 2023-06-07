@@ -1,11 +1,14 @@
 import useTitle from '../hooks/useTitle'
 import logo from '../assets/linechat_logo.png'
 import { Link } from 'react-router-dom'
-import { AiOutlineUser, AiOutlineLock } from 'react-icons/ai'
+import { AiOutlineUser, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import { useState } from 'react'
 
 
 const Login = () => {
   useTitle()
+  const [showPassword, setShowPassword] = useState(true)
+
 
   return (
     <div className='bg-secondary min-h-screen py-[3rem]'>
@@ -46,17 +49,23 @@ const Login = () => {
               <label htmlFor="password" className='block'>Password</label>
               <Link to="/forgot-password" className='text-sm text-quaternary-blue transition-all hover:text-quaternary-dark-blue focus:text-quaternary-dark-blue' tabIndex={-1}>Forgot password?</Link>
             </div>
-            <div className='flex items-center'>
+            <div className='flex items-center relative'>
               <div className='bg-primary h-[42px] w-[47px] mt-[0.5rem] flex justify-center items-center border border-gray-300 rounded-sm border-r-0 rounded-r-none'>
                 <AiOutlineLock className="text-gray-500" />
               </div>
               <input
-                type="password"
+                type={showPassword ? 'password' : 'text'}
                 name="password"
                 id="password"
                 placeholder='Enter Password'
                 className='flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none focus:outline-none placeholder:text-sm'
               />
+              <span
+                className='absolute right-3 top-1/2 transform -translate-y-1/4 cursor-pointer text-xl'
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <AiOutlineEye className='text-gray-500 ' /> : <AiOutlineEyeInvisible className='text-gray-500' />}
+              </span>
             </div>
           </div>
 
@@ -76,7 +85,7 @@ const Login = () => {
           <div className='mt-[1.5rem]'>
             <button
               type='submit'
-              className='w-full p-[0.5rem] bg-quaternary-blue text-white rounded-md focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all'
+              className='w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all'
             >Sign in</button>
           </div>
           <div className='mt-[1.5rem]'>
@@ -84,6 +93,11 @@ const Login = () => {
           </div>
         </form>
       </main>
+      <footer>
+        <div className='w-fit m-auto mt-[1.5rem]'>
+          <p className='text-sm text-gray-500'>© 2023 LineChat. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   )
 }
