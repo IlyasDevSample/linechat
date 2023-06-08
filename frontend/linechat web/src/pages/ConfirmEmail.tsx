@@ -52,11 +52,11 @@ const ConfirmEmail = () => {
               <h4 className='w-fit m-auto font-dynamic font-semibold'>
                 <span className='text-gray-500'>
                   {success.status.toUpperCase()}:
-                  Something went wrong
+                  {success.status.toUpperCase() === 'SUCCESS' ? ' Email Confirmed' : ' Email Confirmation Failed'}
                 </span>
               </h4>
               <p
-                className={'w-fit m-auto mt-[1rem] text-lg' + (success.status.toUpperCase() === 'SUCCESS' ? ' text-green-500' : ' text-red-500')}
+                className={'w-fit m-auto mt-[1rem] text-lg text-center' + (success.status.toUpperCase() === 'SUCCESS' ? ' text-green-500' : ' text-red-500')}
               >
                 {success.message === 'Token already used' ? 'Your email address has already been confirmed.' : success.message}
               </p>

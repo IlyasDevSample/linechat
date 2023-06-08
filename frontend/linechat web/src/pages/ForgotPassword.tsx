@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom'
 import { AiOutlineMail, AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import axios from 'axios'
+import { StatusResponseType } from '../types/statusResponseType'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type FormValues = {
   email: string
@@ -11,12 +15,35 @@ type FormValues = {
 
 const ForgotPassword = () => {
   useTitle("Forgot Password")
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>()
   const [loading, setLoading] = useState(false)
 
   const onSubmit = (data: FormValues) => {
     setLoading(true)
-    console.log("form data", data)
+    axios.get<StatusResponseType>(import.meta.env.VITE_API_URL + '/account/forgot-password?email=' + data.email)
+      .then((res) => {
+        reset()
+        toast.success(
+          "Check your email to reset password."
+          , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true
+        });
+      }).catch((err) => {
+        toast.error(err.response.data.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true
+        });
+
+      }).finally(() => {
+        setLoading(false)
+      })
   }
 
   return (
@@ -107,6 +134,7 @@ const ForgotPassword = () => {
           <p className='text-sm text-gray-500'>© 2023 LineChat. All rights reserved.</p>
         </div>
       </footer>
+      <ToastContainer />
     </div>
   )
 }
