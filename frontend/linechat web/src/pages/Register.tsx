@@ -23,6 +23,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<StatusResponseType>({ status: '', message: '' })
   const [success, setSuccess] = useState({ status: false, email: '' })
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const onSubmit = (data: FormValues) => {
     setLoading(true)
@@ -37,9 +38,12 @@ const Register = () => {
           setSuccess({ status: true, email: res.data.email })
           reset()
           setError({ status: '', message: '' })
+          setIsSubmitted(true)
         })
         .catch((err) => {
-          setError(err.response.data)
+          if (!isSubmitted) {
+            setError(err.response.data)
+          }
         })
         .finally(() => {
           setLoading(false)
