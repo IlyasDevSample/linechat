@@ -70,7 +70,8 @@ const Register = () => {
           noValidate
           className='max-w-[450px] m-auto mt-[1.5rem] bg-white p-[2.5rem]'
         >
-          {error.status.length > 0 &&<p
+          {error.status.length > 0 &&
+          <p
             className='text-sm text-gray-500 bg-red-100 p-4 rounded-sm border border-red-300'
           >
             { error.status.toUpperCase() + ': ' + error.message} 

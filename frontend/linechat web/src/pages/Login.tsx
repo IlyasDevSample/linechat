@@ -15,7 +15,7 @@ type FormValues = {
 const Login = () => {
   useTitle()
   const [showPassword, setShowPassword] = useState(true)
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>()
   const [loading, setLoading] = useState(false)
 
   const onSubmit = (data: FormValues) => {
