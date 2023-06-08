@@ -17,15 +17,16 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(true)
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>()
   const [loading, setLoading] = useState(false)
+  const [ error, setError ] = useState(false)
 
   const onSubmit = (data: FormValues) => {
     setLoading(true)
     const credentials = { username: data.email, password: data.password }
     axios.post(import.meta.env.VITE_API_URL + '/account/login', credentials)
       .then((res) => {
-        console.log(res.status, res.data, res.headers)
-      }).catch((err) => {
-        console.log(err.response.data)
+        console.log(res.data)
+      }).catch(() => {
+        setError(true)
       })
       .finally(() => {
         setLoading(false)
@@ -51,6 +52,12 @@ const Login = () => {
           noValidate
           className='max-w-[450px] m-auto mt-[1.5rem] bg-white p-[2.5rem]'
         >
+          {error &&
+          <p
+            className='text-sm text-gray-500 bg-red-100 p-4 rounded-sm border border-red-300'
+          >
+            Incorrect username or password combination
+          </p>}
           <div className='w-full'>
             <label htmlFor="email" className='block mt-[1.5rem]'>Email</label>
             <div
