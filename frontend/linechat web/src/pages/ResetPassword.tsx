@@ -34,7 +34,6 @@ const ResetPassword = () => {
     }
     axios.post<StatusResponseType>(import.meta.env.VITE_API_URL + '/account/reset-password', credentials)
       .then((res) => {
-        console.log(res.data)
         setSuccess({ status: res.data.status, message: res.data.message })
         reset()
       }
