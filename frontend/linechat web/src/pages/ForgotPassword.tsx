@@ -1,8 +1,9 @@
 import useTitle from '../hooks/useTitle'
 import logo from '../assets/linechat_logo.png'
 import { Link } from 'react-router-dom'
-import { AiOutlineMail } from 'react-icons/ai'
+import { AiOutlineMail, AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 type FormValues = {
   email: string
@@ -11,8 +12,10 @@ type FormValues = {
 const ForgotPassword = () => {
   useTitle("Forgot Password")
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit = (data: FormValues) => {
+    setLoading(true)
     console.log("form data", data)
   }
 
@@ -74,9 +77,13 @@ const ForgotPassword = () => {
 
           <div className='mt-[1.5rem]'>
             <button
+              disabled={loading}
               type='submit'
-              className='w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all'
-            >Reset</button>
+              className={'flex justify-center items-center w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm cursor-pointer focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all' + (loading ? ' opacity-50 cursor-not-allowed' : '')}
+            >
+              Reset
+              {loading && <AiOutlineLoading3Quarters className='text-white animate-spin ml-[0.5rem] text-lg' />}
+            </button>
           </div>
           <div className='mt-[1.5rem]'>
             <p className='text-sm text-gray-500'>

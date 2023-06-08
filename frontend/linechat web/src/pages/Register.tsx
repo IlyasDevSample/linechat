@@ -1,9 +1,9 @@
 import useTitle from '../hooks/useTitle'
 import logo from '../assets/linechat_logo.png'
 import { Link } from 'react-router-dom'
-import { AiOutlineUser, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail } from 'react-icons/ai'
+import { AiOutlineUser, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail, AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
 
 type FormValues = {
   fullname: string
@@ -16,8 +16,10 @@ const Register = () => {
   useTitle()
   const [showPassword, setShowPassword] = useState(true)
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit = (data: FormValues) => {
+    setLoading(true)
     console.log("form data", data)
   }
 
@@ -139,10 +141,12 @@ const Register = () => {
           </div>
           <div className='mt-[1.5rem]'>
             <button
+              disabled={loading}
               type='submit'
-              className='w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all'
+              className={'flex justify-center items-center w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm cursor-pointer focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all' + (loading ? ' opacity-50 cursor-not-allowed' : '')}
             >
               Register Now
+              {loading && <AiOutlineLoading3Quarters className='text-white animate-spin ml-[0.5rem] text-lg' />}
             </button>
           </div>
           <div className='mt-[1.5rem]'>

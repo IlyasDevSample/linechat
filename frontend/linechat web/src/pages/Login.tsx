@@ -1,9 +1,10 @@
 import useTitle from '../hooks/useTitle'
 import logo from '../assets/linechat_logo.png'
 import { Link } from 'react-router-dom'
-import { AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail } from 'react-icons/ai'
+import { AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail, AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import axios from 'axios'
 
 type FormValues = {
   email: string
@@ -15,9 +16,21 @@ const Login = () => {
   useTitle()
   const [showPassword, setShowPassword] = useState(true)
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit = (data: FormValues) => {
-    console.log("form data", data)
+    setLoading(true)
+    const credentials = { username: data.email, password: data.password }
+    axios.post('http://localhost:8080/api/v1/account/login', credentials)
+      .then((res) => {
+        console.log(res.status, res.data, res.headers)
+      }).catch((err) => {
+        console.log(err.response.data)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+
   }
 
 
@@ -117,9 +130,13 @@ const Login = () => {
 
           <div className='mt-[1.5rem]'>
             <button
+              disabled={loading}
               type='submit'
-              className='w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all'
-            >Sign in</button>
+              className={'flex justify-center items-center w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm cursor-pointer focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all' + (loading ? ' opacity-50 cursor-not-allowed' : '')}
+            >
+              Sign in
+              {loading && <AiOutlineLoading3Quarters className='text-white animate-spin ml-[0.5rem] text-lg' />}
+            </button>
           </div>
           <div className='mt-[1.5rem]'>
             <p className='text-sm text-gray-500'>Don't have an account? <Link to="/register" className='text-quaternary-blue transition-all hover:text-quaternary-dark-blue focus:text-quaternary-dark-blue'>Sign up</Link></p>
