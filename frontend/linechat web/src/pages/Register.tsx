@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { StatusResponseType } from '../types/statusResponseType'
+import { motion } from 'framer-motion'
 
 type FormValues = {
   fullname: string
@@ -21,7 +22,7 @@ const Register = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<StatusResponseType>({ status: '', message: '' })
-  const [success, setSuccess] = useState({ status: true, email: 'elaissiilyas@gmail.com' })
+  const [success, setSuccess] = useState({ status: false, email: '' })
 
   const onSubmit = (data: FormValues) => {
     setLoading(true)
@@ -189,7 +190,11 @@ const Register = () => {
       </footer>
       {/* Show success modal */}
       {success.status && (
-        <div
+        <motion.div
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
           className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50'
         >
           <div
@@ -212,7 +217,7 @@ const Register = () => {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   )
