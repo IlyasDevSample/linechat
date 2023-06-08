@@ -21,7 +21,7 @@ const Login = () => {
   const onSubmit = (data: FormValues) => {
     setLoading(true)
     const credentials = { username: data.email, password: data.password }
-    axios.post('http://localhost:8080/api/v1/account/login', credentials)
+    axios.post(import.meta.env.VITE_API_URL + '/account/login', credentials)
       .then((res) => {
         console.log(res.status, res.data, res.headers)
       }).catch((err) => {

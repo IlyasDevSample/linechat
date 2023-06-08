@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
 import ForgotPassword from './pages/ForgotPassword'
+import ConfirmEmail from './pages/ConfirmEmail'
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/">
@@ -12,6 +13,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path='login' element={<Login />} />
     <Route path='register' element={<Register />}/>
     <Route path='forgot-password' element={<ForgotPassword />}/>
+    <Route path='confirm-email' element={<ConfirmEmail />}/>
     <Route path="dashboard" element={<Dashboard />} />
     <Route path="404" element={<NotFound/>} />
     <Route path="*" element={<Navigate to="/404" />} />

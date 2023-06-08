@@ -1,9 +1,11 @@
 import useTitle from '../hooks/useTitle'
 import logo from '../assets/linechat_logo.png'
-import { Link } from 'react-router-dom'
-import { AiOutlineUser, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail, AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { Link, useNavigate } from 'react-router-dom'
+import { AiOutlineCheck, AiOutlineUser, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail, AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useState } from 'react'
-import { set, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
+import { StatusResponseType } from '../types/statusResponseType'
 
 type FormValues = {
   fullname: string
@@ -14,17 +16,38 @@ type FormValues = {
 
 const Register = () => {
   useTitle()
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(true)
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>()
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<StatusResponseType>({ status: '', message: '' })
+  const [success, setSuccess] = useState({ status: true, email: 'elaissiilyas@gmail.com' })
 
   const onSubmit = (data: FormValues) => {
     setLoading(true)
-    console.log("form data", data)
-  }
+    if (data.agree) {
+      const credentials = {
+        fullName: data.fullname,
+        username: data.email,
+        password: data.password
+      }
+      axios.post(import.meta.env.VITE_API_URL + "/account/register", credentials)
+        .then((res) => {
+          setSuccess({ status: true, email: res.data.email })
+          reset()
+          setError({ status: '', message: '' })
+        })
+        .catch((err) => {
+          setError(err.response.data)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
 
+    }
+  }
   return (
-    <div className='bg-secondary min-h-screen py-[3rem]'>
+    <div className='bg-secondary min-h-screen py-[3rem] relative'>
       <header className='w-14 m-auto mt-[1rem]'>
         <img src={logo} alt="Linechat logo" />
       </header>
@@ -42,6 +65,11 @@ const Register = () => {
           noValidate
           className='max-w-[450px] m-auto mt-[1.5rem] bg-white p-[2.5rem]'
         >
+          {error.status.length > 0 &&<p
+            className='text-sm text-gray-500 bg-red-100 p-4 rounded-sm border border-red-300'
+          >
+            { error.status.toUpperCase() + ': ' + error.message} 
+          </p>}
           <div className='w-full'>
             <label htmlFor="fullname" className='block mt-[1.5rem]'>
               Full name
@@ -84,7 +112,7 @@ const Register = () => {
                 })}
                 id="email"
                 placeholder='Enter Email'
-                className={'flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none placeholder:text-sm outline-none' + (errors.email ? 'outline outline-3 outline-red-300' : '') }
+                className={'flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none placeholder:text-sm outline-none' + (errors.email ? 'outline outline-3 outline-red-300' : '')}
               />
             </div>
             {errors.email && <span className='text-sm text-red-400'>{errors.email.message}</span>}
@@ -113,7 +141,7 @@ const Register = () => {
                 })}
                 id="password"
                 placeholder='Enter Password'
-                className={'flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none placeholder:text-sm outline-none' + (errors.email ? 'outline outline-3 outline-red-300' : '') }
+                className={'flex-grow p-[0.5rem] mt-[0.5rem] border border-gray-300 rounded-sm rounded-l-none placeholder:text-sm outline-none' + (errors.email ? 'outline outline-3 outline-red-300' : '')}
               />
               <span
                 className='absolute right-3 top-1/2 transform -translate-y-1/4 cursor-pointer text-xl'
@@ -159,6 +187,33 @@ const Register = () => {
           <p className='text-sm text-gray-500'>© 2023 LineChat. All rights reserved.</p>
         </div>
       </footer>
+      {/* Show success modal */}
+      {success.status && (
+        <div
+          className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50'
+        >
+          <div
+            className='bg-white rounded-sm p-[2rem] w-full max-w-[450px] shadow-2xl'
+          >
+            <div className='flex justify-center p-3 items-center bg-quaternary-light-blue w-fit m-auto rounded-full'>
+              <AiOutlineCheck className='text-quaternary-blue text-3xl' />
+            </div>
+            <h1 className='text-center text-xl mt-[1rem]'>Registration Success</h1>
+            <p className='text-center text-sm mt-[0.5rem]'>You have successfully registered your account</p>
+            <p className='text-center text-sm mt-[0.5rem]'>Please check your email "<span
+              className='text-quaternary-blue'
+            >{success.email}</span>" to verify your account</p>
+            <div className='flex justify-center items-center mt-[1.5rem]'>
+              <button
+                className='flex justify-center items-center w-full p-[0.5rem] bg-quaternary-blue text-white rounded-sm cursor-pointer focus:outline-none hover:bg-quaternary-dark-blue focus:bg-quaternary-dark-blue focus:ring-primary focus:border-transparent transition-all'
+                onClick={() => navigate('/login')}
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
