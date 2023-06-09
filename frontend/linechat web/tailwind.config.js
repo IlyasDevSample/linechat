@@ -14,6 +14,12 @@ export default {
         'quaternary-light-blue': '#E3E1FC',
         'quaternary-dark-blue': '#4F46E5',
       },
+      boxShadow: {
+        'primary-web': '0 2px 4px rgba(15,34,58,.12)',
+      },
+      screens: {
+        'lg': '992px',
+      },
     },
   },
   plugins: [],
