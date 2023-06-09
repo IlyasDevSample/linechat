@@ -5,9 +5,9 @@ export const useSignOut = () => {
   const clearBearerToken = useAuthStore(state => state.clearBearerToken);
   const navigate = useNavigate();
 
-  const signOut = () => {
+  const signOut = (redirectTo = '/') => {
     clearBearerToken();
-    navigate('/');
+    navigate(redirectTo);
   }
 
   return signOut;

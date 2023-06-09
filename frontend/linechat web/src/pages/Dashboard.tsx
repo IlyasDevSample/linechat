@@ -16,7 +16,7 @@ const Dashboard = () => {
     <div>
       Dashboard
       <p>{bearerToken}</p>
-      <button onClick={signOut}>Logout</button>
+      <button onClick={() => signOut()}>Logout</button>
     </div>
   )
 }
