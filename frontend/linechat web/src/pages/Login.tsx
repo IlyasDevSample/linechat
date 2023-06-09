@@ -5,7 +5,9 @@ import { AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible, AiOutlineMail, AiOu
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
+import { useAuthRedirect } from '../hooks/useAuthRedirect'
 
 type FormValues = {
   email: string
@@ -15,19 +17,23 @@ type FormValues = {
 
 const Login = () => {
   useTitle()
+  useAuthRedirect()
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(true)
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>()
   const [loading, setLoading] = useState(false)
   const [ error, setError ] = useState(false)
   const setBearerToken = useAuthStore((state) => state.setBearerToken)
+  
 
   const onSubmit = (data: FormValues) => {
     setLoading(true)
     const credentials = { username: data.email, password: data.password }
     axios.post(import.meta.env.VITE_API_URL + '/account/login', credentials)
       .then((res) => {
-        setBearerToken(res.headers.authorization)
+        setBearerToken(res.headers.authorization, data.remember)
         reset()
+        navigate('/dashboard', { replace: true })
       }).catch(() => {
         setError(true)
       })

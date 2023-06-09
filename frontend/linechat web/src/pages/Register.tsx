@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { StatusResponseType } from '../types/statusResponseType'
 import { motion } from 'framer-motion'
+import { useAuthRedirect } from '../hooks/useAuthRedirect'
 
 type FormValues = {
   fullname: string
@@ -17,6 +18,7 @@ type FormValues = {
 
 const Register = () => {
   useTitle()
+  useAuthRedirect()
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(true)
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>()
