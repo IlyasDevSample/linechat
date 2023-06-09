@@ -3,7 +3,6 @@ package me.ilyaselaissi.linechatapi.controller;
 import me.ilyaselaissi.linechatapi.dto.*;
 import me.ilyaselaissi.linechatapi.model.User;
 import me.ilyaselaissi.linechatapi.service.user.UserService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
