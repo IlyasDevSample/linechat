@@ -70,7 +70,7 @@ const Register = () => {
         <form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
-          className='max-w-[450px] m-auto mt-[1.5rem] bg-white p-[2.5rem]'
+          className='w-[calc(100%-10px)] max-w-[450px] m-auto mt-[1.5rem] bg-white p-[2.2rem] md:p-[2.5rem]'
         >
           {error.status.length > 0 &&
           <p
