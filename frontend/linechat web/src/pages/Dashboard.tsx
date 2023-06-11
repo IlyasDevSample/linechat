@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useAuthorize } from '../hooks/useAuthorize'
-import { useSignOut } from '../hooks/useSignOut'
 import useTitle from '../hooks/useTitle'
 import { useAuthStore } from '../stores/authStore'
 import { Link, NavLink } from 'react-router-dom'
@@ -9,13 +8,16 @@ import avatar from '../assets/avatar.png'
 import { RiGroupLine, RiUserLine, RiMessage3Line, RiSettingsLine, RiSunLine, RiMoonLine, RiTeamLine } from 'react-icons/ri'
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
+import Menu from '../components/Menu'
 
 const Dashboard = () => {
   useTitle('Dashboard')
   useAuthorize()
-  const signOut = useSignOut()
+  
   const bearerToken = useAuthStore((state) => state.bearerToken)
   const [darkMode, setDarkMode] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
+
   useEffect(() => {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setDarkMode(true)
@@ -26,6 +28,7 @@ const Dashboard = () => {
     return null
   }
   const isNotMobile = window.innerWidth >= 992;
+  
 
 
   const handleDarkMode = () => {
@@ -55,13 +58,13 @@ const Dashboard = () => {
             >
               <NavLink
                 to='/dashboard'
-                data-tooltip-id='chat'
-                data-tooltip-content='Chat'
+                data-tooltip-id='chats'
+                data-tooltip-content='Chats'
                 data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
               >
                 <RiMessage3Line className='text-xl lg:text-2xl ' />
-                {isNotMobile && <Tooltip id='chat' />}
+                {isNotMobile && <Tooltip id='chats' />}
               </NavLink>
             </li>
 
@@ -137,6 +140,7 @@ const Dashboard = () => {
                 data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
                 onClick={handleDarkMode}
+                tabIndex={0}
               >
                 {darkMode ? <RiSunLine className='text-xl lg:text-2xl ' /> : <RiMoonLine className='text-xl lg:text-2xl ' />}
                 {isNotMobile && <Tooltip id='dark-mode' />}
@@ -147,11 +151,15 @@ const Dashboard = () => {
               className='lg:mt-2'
             >
               <span
-                className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center"
+                className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center relative"
+                onClick={() => setShowMenu(!showMenu)}
+                onBlur={() => setShowMenu(false)}
+                tabIndex={0}
               >
                 <img src={avatar} alt="user avatar" 
                   className='h-10 w-10 rounded-full select-none cursor-pointer border-2 border-gray-300 dark:border-quaternary-blue'
                 />
+                {showMenu && <Menu setShowMenu={setShowMenu}/>}
               </span>
             </li>
           </ul>
