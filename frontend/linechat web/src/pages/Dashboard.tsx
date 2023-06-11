@@ -7,6 +7,8 @@ import { Link, NavLink } from 'react-router-dom'
 import brandLogo from '../assets/linechat_logo.png'
 import avatar from '../assets/avatar.png'
 import { RiGroupLine, RiUserLine, RiMessage3Line, RiSettingsLine, RiSunLine, RiMoonLine, RiTeamLine } from 'react-icons/ri'
+import 'react-tooltip/dist/react-tooltip.css'
+import { Tooltip } from 'react-tooltip'
 
 const Dashboard = () => {
   useTitle('Dashboard')
@@ -23,6 +25,7 @@ const Dashboard = () => {
   if (!bearerToken) {
     return null
   }
+  const isNotMobile = window.innerWidth >= 992;
 
 
   const handleDarkMode = () => {
@@ -52,9 +55,13 @@ const Dashboard = () => {
             >
               <NavLink
                 to='/dashboard'
+                data-tooltip-id='chat'
+                data-tooltip-content='Chat'
+                data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
               >
                 <RiMessage3Line className='text-xl lg:text-2xl ' />
+                {isNotMobile && <Tooltip id='chat' />}
               </NavLink>
             </li>
 
@@ -62,10 +69,14 @@ const Dashboard = () => {
               className='lg:mt-2 group cursor-pointer'
             >
               <NavLink
-                to='/users'
+                to='/friends'
+                data-tooltip-id='friends'
+                data-tooltip-content='Friends'
+                data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
               >
                 <RiGroupLine className='text-xl lg:text-2xl ' />
+                {isNotMobile && <Tooltip id='friends' />}
               </NavLink>
             </li>
 
@@ -74,9 +85,13 @@ const Dashboard = () => {
             >
               <NavLink
                 to='/groups'
+                data-tooltip-id='groups'
+                data-tooltip-content='Groups'
+                data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
               >
                 <RiTeamLine className='text-xl lg:text-2xl ' />
+                {isNotMobile && <Tooltip id='groups' />}
               </NavLink>
             </li>
 
@@ -85,9 +100,13 @@ const Dashboard = () => {
             >
               <NavLink
                 to='/profile'
+                data-tooltip-id='profile'
+                data-tooltip-content='Profile'
+                data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
               >
                 <RiUserLine className='text-xl lg:text-2xl ' />
+                {isNotMobile && <Tooltip id='profile' />}
               </NavLink>
             </li>
 
@@ -96,9 +115,13 @@ const Dashboard = () => {
             >
               <NavLink
                 to='/settings'
+                data-tooltip-id='settings'
+                data-tooltip-content='Settings'
+                data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
               >
                 <RiSettingsLine className='text-xl lg:text-2xl ' />
+                {isNotMobile && <Tooltip id='settings' />}
               </NavLink>
             </li>
           </ul>
@@ -109,11 +132,14 @@ const Dashboard = () => {
               className='lg:mt-2 group cursor-pointer'
             >
               <span
-
+                data-tooltip-content='Dark / Light Mode'
+                data-tooltip-id='dark-mode'
+                data-tooltip-place='right'
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
                 onClick={handleDarkMode}
               >
                 {darkMode ? <RiSunLine className='text-xl lg:text-2xl ' /> : <RiMoonLine className='text-xl lg:text-2xl ' />}
+                {isNotMobile && <Tooltip id='dark-mode' />}
               </span>
             </li>
 
