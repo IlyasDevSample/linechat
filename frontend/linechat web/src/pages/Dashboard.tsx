@@ -9,11 +9,12 @@ import { RiGroupLine, RiUserLine, RiMessage3Line, RiSettingsLine, RiSunLine, RiM
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
 import Menu from '../components/Menu'
+import { AnimatePresence } from 'framer-motion'
 
 const Dashboard = () => {
   useTitle('Dashboard')
   useAuthorize()
-  
+
   const bearerToken = useAuthStore((state) => state.bearerToken)
   const [darkMode, setDarkMode] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -28,7 +29,7 @@ const Dashboard = () => {
     return null
   }
   const isNotMobile = window.innerWidth >= 992;
-  
+
 
 
   const handleDarkMode = () => {
@@ -156,10 +157,12 @@ const Dashboard = () => {
                 onBlur={() => setShowMenu(false)}
                 tabIndex={0}
               >
-                <img src={avatar} alt="user avatar" 
+                <img src={avatar} alt="user avatar"
                   className='h-10 w-10 rounded-full select-none cursor-pointer border-2 border-gray-300 dark:border-quaternary-blue'
                 />
-                {showMenu && <Menu setShowMenu={setShowMenu}/>}
+                <AnimatePresence>
+                  {showMenu && <Menu />}
+                </AnimatePresence>
               </span>
             </li>
           </ul>

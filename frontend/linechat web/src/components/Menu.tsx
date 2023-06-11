@@ -3,11 +3,9 @@ import { motion } from 'framer-motion'
 import { useSignOut } from '../hooks/useSignOut'
 import { Link } from 'react-router-dom'
 
-type Props = {
-  setShowMenu: (showMenu: boolean) => void
-}
 
-const Menu = ({ setShowMenu }: Props) => {
+
+const Menu = () => {
   const signOut = useSignOut()
 
   const handleSignOut = () => {
@@ -18,8 +16,8 @@ const Menu = ({ setShowMenu }: Props) => {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      onMouseLeave={() => setShowMenu(false)}
       className='w-[160px] h-fit absolute top-[-145px] right-[-105px] bg-white dark:bg-contact-dark-primary rounded-md shadow-md z-50 border dark:border-sidebar-dark-primary py-2'
     >
       <ul className='flex flex-col justify-center items-center h-full'>
