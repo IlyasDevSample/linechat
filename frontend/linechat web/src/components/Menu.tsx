@@ -23,7 +23,7 @@ const Menu = () => {
       <ul className='flex flex-col justify-center items-center h-full'>
         <li>
           <Link
-            to='/profile'
+            to='/home/profile'
             className='h-9 w-[160px] flex items-center justify-between px-6 hover:bg-[#F8F9FA] cursor-pointer font-[400] text-md text-[#656A70] dark:hover:bg-sidebar-dark-primary dark:text-gray-300'
           >
             <span>
@@ -34,7 +34,7 @@ const Menu = () => {
         </li>
         <li>
           <Link
-            to='/profile'
+            to='/home/settings'
             className='h-9 w-[160px] flex items-center justify-between px-6 hover:bg-[#F8F9FA] cursor-pointer font-[400] text-md text-[#656A70] dark:hover:bg-sidebar-dark-primary dark:text-gray-300'
           >
             <span>

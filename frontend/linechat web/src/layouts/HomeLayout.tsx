@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuthorize } from '../hooks/useAuthorize'
 import useTitle from '../hooks/useTitle'
 import { useAuthStore } from '../stores/authStore'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import brandLogo from '../assets/linechat_logo.png'
 import avatar from '../assets/avatar.png'
 import { RiGroupLine, RiUserLine, RiMessage3Line, RiSettingsLine, RiSunLine, RiMoonLine, RiTeamLine } from 'react-icons/ri'
@@ -11,8 +11,8 @@ import { Tooltip } from 'react-tooltip'
 import Menu from '../components/Menu'
 import { AnimatePresence } from 'framer-motion'
 
-const Dashboard = () => {
-  useTitle('Dashboard')
+const HomeLayout = () => {
+  useTitle()
   useAuthorize()
 
   const bearerToken = useAuthStore((state) => state.bearerToken)
@@ -58,7 +58,7 @@ const Dashboard = () => {
               className='lg:mt-2 group cursor-pointer'
             >
               <NavLink
-                to='/dashboard'
+                to='/home/chat'
                 data-tooltip-id='chats'
                 data-tooltip-content='Chats'
                 data-tooltip-place='right'
@@ -73,7 +73,7 @@ const Dashboard = () => {
               className='lg:mt-2 group cursor-pointer'
             >
               <NavLink
-                to='/friends'
+                to='/home/friends'
                 data-tooltip-id='friends'
                 data-tooltip-content='Friends'
                 data-tooltip-place='right'
@@ -88,7 +88,7 @@ const Dashboard = () => {
               className='lg:mt-2 group cursor-pointer'
             >
               <NavLink
-                to='/groups'
+                to='/home/groups'
                 data-tooltip-id='groups'
                 data-tooltip-content='Groups'
                 data-tooltip-place='right'
@@ -103,7 +103,7 @@ const Dashboard = () => {
               className='lg:mt-2 group cursor-pointer'
             >
               <NavLink
-                to='/profile'
+                to='/home/profile'
                 data-tooltip-id='profile'
                 data-tooltip-content='Profile'
                 data-tooltip-place='right'
@@ -118,7 +118,7 @@ const Dashboard = () => {
               className='lg:mt-2 group cursor-pointer'
             >
               <NavLink
-                to='/settings'
+                to='/home/settings'
                 data-tooltip-id='settings'
                 data-tooltip-content='Settings'
                 data-tooltip-place='right'
@@ -153,11 +153,12 @@ const Dashboard = () => {
             >
               <span
                 className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center relative"
-                onClick={() => setShowMenu(!showMenu)}
-                onBlur={() => setShowMenu(false)}
-                tabIndex={0}
+
               >
                 <img src={avatar} alt="user avatar"
+                  onClick={() => setShowMenu(!showMenu)}
+                  onBlur={() => setShowMenu(false)}
+                  tabIndex={0}
                   className='h-10 w-10 rounded-full select-none cursor-pointer border-2 border-gray-300 dark:border-quaternary-blue'
                 />
                 <AnimatePresence>
@@ -169,9 +170,10 @@ const Dashboard = () => {
         </nav>
       </div>
       <main>
+        <Outlet />
       </main>
     </div>
   )
 }
 
-export default Dashboard
+export default HomeLayout

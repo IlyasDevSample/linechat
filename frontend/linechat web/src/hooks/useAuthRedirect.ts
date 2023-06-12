@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 
-export const useAuthRedirect = (redirectTo = '/dashboard') => {
+export const useAuthRedirect = (redirectTo = '/home/chat') => {
   const getBearerToken = useAuthStore((state) => state.getBearerToken);
   const navigate = useNavigate();
 

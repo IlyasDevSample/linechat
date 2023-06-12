@@ -33,7 +33,7 @@ const Login = () => {
       .then((res) => {
         setBearerToken(res.headers.authorization, data.remember)
         reset()
-        navigate('/dashboard', { replace: true })
+        navigate('/home/chat', { replace: true })
       }).catch(() => {
         setError(true)
       })
