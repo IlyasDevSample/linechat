@@ -20,6 +20,7 @@ export default {
         "chat-dark-primary": "#262E35",
         'txt-gray': '#EFF2E1',
         'txt-gray-2': '#878A92',
+        'txt-dark': '#343a40'
       },
       boxShadow: {
         'primary-web': '0 2px 4px rgba(15,34,58,.12)',

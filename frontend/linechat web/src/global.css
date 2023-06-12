@@ -18,3 +18,7 @@ body {
 nav a.active {
     @apply bg-primary text-quaternary-blue dark:bg-sidebar-dark-btn dark:text-quaternary-blue;
 }
+
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+    @apply bg-[#afafaf];
+}
