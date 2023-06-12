@@ -4,6 +4,7 @@ import { useAuthStore } from '../stores/authStore'
 import SideBar from '../components/SideBar'
 import { Outlet } from 'react-router-dom'
 import UserChat from '../components/UserChat'
+import { AnimatePresence } from 'framer-motion'
 
 const HomeLayout = () => {
   useTitle()
@@ -21,9 +22,11 @@ const HomeLayout = () => {
         className='flex flex-row w-full overflow-hidden'
       >
         <div
-          className='w-full lg:min-w-[380px] lg:max-w-[380px] h-screen overflow-y-auto lg:mr-1'
+          className='w-full lg:min-w-[380px] lg:max-w-[380px] h-screen overflow-hidden lg:mr-1'
         >
-          <Outlet />
+          <AnimatePresence>
+            <Outlet />
+          </AnimatePresence>
         </div>
         <UserChat />
       </main>
