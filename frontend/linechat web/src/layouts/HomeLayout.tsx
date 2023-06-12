@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
 import { useAuthorize } from '../hooks/useAuthorize'
 import useTitle from '../hooks/useTitle'
 import { useAuthStore } from '../stores/authStore'
 import SideBar from '../components/SideBar'
 import { Outlet } from 'react-router-dom'
+import UserChat from '../components/UserChat'
 
 const HomeLayout = () => {
   useTitle()
@@ -13,12 +13,19 @@ const HomeLayout = () => {
   if (!bearerToken) {
     return null
   }
-  
+
   return (
     <div className='bg-primary dark:bg-contact-dark-primary h-screen max-h-screen w-full overflow-hidden flex'>
       <SideBar />
-      <main>
-        <Outlet />
+      <main
+        className='flex flex-row w-full overflow-hidden'
+      >
+        <div
+          className='w-full lg:min-w-[380px] lg:max-w-[380px] h-screen overflow-y-auto lg:mr-1'
+        >
+          <Outlet />
+        </div>
+        <UserChat />
       </main>
     </div>
   )

@@ -27,7 +27,7 @@ const SideBar = () => {
   }
 
   return (
-    <div className='fixed bottom-0 lg:static lg:bottom-none bg-white dark:bg-sidebar-dark-primary border-t border-gray-200 dark:border-0 lg:border-0 z-10 lg:shadow-primary-web h-[60px] w-full lg:max-w-[75px] lg:min-w-[75px] lg:min-h-[570px] lg:h-screen'>
+    <div className='fixed bottom-0 lg:static lg:bottom-none bg-white dark:bg-sidebar-dark-primary border-t border-gray-200 dark:border-0 lg:border-0 z-10 lg:shadow-primary-web h-[60px] w-full lg:max-w-[75px] lg:min-w-[75px] lg:min-h-[570px] lg:h-screen lg:mr-1'>
       <header
         className='hidden lg:flex justify-center items-center h-[75px] w-[75px] mb-1'
       >
