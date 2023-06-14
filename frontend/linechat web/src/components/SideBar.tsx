@@ -8,23 +8,29 @@ import Menu from '../components/Menu'
 import { AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import ProfileImg from './ProfileImg'
+import { useUserSettingStore } from '../stores/userSettingStore'
 
 const SideBar = () => {
-  const [darkMode, setDarkMode] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
-
+  const darkMode = useUserSettingStore((state) => state.darkMode)
+  const setDarkMode = useUserSettingStore((state) => state.setDarkMode)
+  
   useEffect(() => {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setDarkMode(true)
-      document.documentElement.classList.add('dark')
     }
-  }, [])
+    if (darkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [setDarkMode, darkMode])
+
 
   const isNotMobile = window.innerWidth >= 992;
 
   const handleDarkMode = () => {
-    setDarkMode((prev) => !prev)
-    document.documentElement.classList.toggle('dark')
+    setDarkMode(!darkMode)
   }
 
   return (
