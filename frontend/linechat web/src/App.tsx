@@ -8,7 +8,7 @@ import ConfirmEmail from './pages/ConfirmEmail'
 import ResetPassword from './pages/ResetPassword'
 import HomeLayout from './layouts/HomeLayout'
 import Chat from './pages/Chat'
-import Friends from './pages/Friends'
+import People from './pages/People'
 import Groups from './pages/Groups'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
@@ -24,7 +24,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="home" element={<HomeLayout />} >
       <Route index element={<Navigate to="/home/chat" />} />
       <Route path="chat" element={<Chat />} />
-      <Route path="friends" element={<Friends />} />
+      <Route path="people" element={<People />} />
       <Route path="groups" element={<Groups />} />
       <Route path="profile" element={<Profile />} />
       <Route path="settings" element={<Settings />} />

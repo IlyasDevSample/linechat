@@ -61,14 +61,14 @@ const SideBar = () => {
             className='lg:mt-2 group cursor-pointer'
           >
             <NavLink
-              to='/home/friends'
-              data-tooltip-id='friends'
-              data-tooltip-content='Friends'
+              to='/home/people'
+              data-tooltip-id='people'
+              data-tooltip-content='People'
               data-tooltip-place='right'
               className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center hover:bg-primary rounded-md text-txt-gray-2 dark:text-gray-300 group-hover:text-quaternary-blue group-hover:dark:bg-sidebar-dark-btn"
             >
               <RiGroupLine className='text-xl lg:text-2xl ' />
-              {isNotMobile && <Tooltip id='friends' />}
+              {isNotMobile && <Tooltip id='people' />}
             </NavLink>
           </li>
 

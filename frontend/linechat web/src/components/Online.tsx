@@ -25,7 +25,7 @@ const Online = () => {
                 className="absolute -top-5 left-1/2 transform -translate-x-1/2"
               >
                 <ProfileImg name="patrick smith" />
-                <UserStatus status="offline" />
+                <UserStatus status="online" />
               </div>
               <h5 className="select-none w-full mt-3 text-center mb-[3px] font-semibold text-[13px] truncate capitalize">
                 {"patrick smith".split(" ")[0]}
