@@ -7,6 +7,7 @@ import { Tooltip } from 'react-tooltip'
 import Menu from '../components/Menu'
 import { AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import ProfileImg from './ProfileImg'
 
 const SideBar = () => {
   const [darkMode, setDarkMode] = useState(false)
@@ -140,14 +141,14 @@ const SideBar = () => {
           >
             <span
               className="h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center relative"
-
             >
-              <img src={avatar} alt="user avatar"
+              <div
                 onClick={() => setShowMenu(!showMenu)}
                 onBlur={() => setShowMenu(false)}
                 tabIndex={0}
-                className='h-10 w-10 rounded-full select-none cursor-pointer border-2 border-gray-300 dark:border-quaternary-blue'
-              />
+              >
+                <ProfileImg name='John Doe' avatar={avatar} />
+              </div>
               <AnimatePresence>
                 {showMenu && <Menu />}
               </AnimatePresence>
