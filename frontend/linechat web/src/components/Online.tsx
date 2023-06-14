@@ -1,6 +1,7 @@
 import ProfileImg from "./ProfileImg"
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import UserStatus from "./UserStatus";
 
 const Online = () => {
   return (
@@ -13,7 +14,7 @@ const Online = () => {
         className="w-full"
       >
         {[...Array(10)].map((_, i) => (
-          <SwiperSlide 
+          <SwiperSlide
             key={i}
             className="w-[71px] h-[91px] flex items-end"
           >
@@ -24,11 +25,7 @@ const Online = () => {
                 className="absolute -top-5 left-1/2 transform -translate-x-1/2"
               >
                 <ProfileImg name="patrick smith" />
-                <div>
-                  <span
-                    className="absolute bottom-0 right-0 w-[11px] h-[11px] bg-green-500 rounded-full border-2 border-white dark:border-sidebar-dark-primary"
-                  ></span>
-                </div>
+                <UserStatus status="offline" />
               </div>
               <h5 className="select-none w-full mt-3 text-center mb-[3px] font-semibold text-[13px] truncate capitalize">
                 {"patrick smith".split(" ")[0]}
