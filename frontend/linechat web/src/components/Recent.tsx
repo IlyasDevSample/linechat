@@ -22,7 +22,7 @@ const Recent = () => {
         <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
         <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
         <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
-        <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
+        <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='01:45 PM' />
       </SimpleBar>
     </div>
   )
