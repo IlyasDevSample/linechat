@@ -9,7 +9,7 @@ const UserInfoBar = () => {
 
   return (
     <div
-      className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-chat-dark-secondary absolute top-0 left-0 w-full bg-white dark:bg-chat-dark-primary dark:border-sidebar-dark-primary z-50"
+      className="flex items-center justify-between p-4 border-b border-gray-200 absolute top-0 left-0 w-full bg-white dark:bg-chat-dark-primary dark:border-sidebar-dark-primary z-50"
     >
       <div className="flex w-fit">
         <div
