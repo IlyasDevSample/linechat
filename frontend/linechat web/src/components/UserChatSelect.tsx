@@ -1,3 +1,4 @@
+import { useLayoutStore } from '../stores/layoutStore';
 import ProfileImg from './ProfileImg';
 import UserStatus from './UserStatus';
 
@@ -10,9 +11,11 @@ type Props = {
 }
 
 const UserChatSelect = ({ name, status, message, time, avatar }: Props) => {
-
+  const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
+  
   return (
     <div
+      onClick={() => setIsChatOpen(true)}
       className='px-5 py-[15px] border-t-primary border-t hover:bg-tertiary dark:hover:bg-sidebar-dark-primary lg:rounded-md cursor-pointer transition-all flex items-stretch justify-center dark:border-t-contact-dark-primary dark:hover:bg-sidebar-dark-tertiary dark:text-dark-gray'
     >
       <div

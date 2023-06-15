@@ -17,7 +17,7 @@ const Recent = () => {
         className={`w-full overflow-y-auto lg:h-[calc(100vh-267px)] h-[calc(100vh-calc(59px+267px))]`}
       >
         <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
-        <UserChatSelect name='john doe' status='online' message='Okay my master' time='02:45 PM' avatar={avatar} />
+        <UserChatSelect name='darth vader' status='online' message='Okay my master' time='02:45 PM' avatar={avatar} />
         <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
         <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
         <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
