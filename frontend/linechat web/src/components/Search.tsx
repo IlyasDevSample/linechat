@@ -14,7 +14,7 @@ const Search = ({ placeholder, title }: Props) => {
       >
         {title}
       </h4>
-      <div
+      <form
         className='flex bg-tertiary dark:bg-sidebar-dark-primary dark:text-dark-blue rounded-md'
       >
         <span
@@ -26,7 +26,7 @@ const Search = ({ placeholder, title }: Props) => {
           className="bg-transparent outline-none w-full py-2 px-4 -ml-[1px] text-[.875rem] font-normal text-txt-dark dark:text-txt-dark-primary dark:placeholder:text-dark-blue placeholder:text-sm placeholder:text-txt-gray-2 placeholder:leading-5 h-[45px] dark:text-dark-blue placeholder:capitalize"
           placeholder={placeholder}
         />
-      </div>
+      </form>
     </div>
   )
 }
