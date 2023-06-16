@@ -5,10 +5,16 @@ import { useEffect, useState } from "react"
 import Message from "./Message"
 import SimpleBar from "simplebar-react"
 import { RiSendPlane2Fill } from 'react-icons/ri'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+import { useUserSettingStore } from "../stores/userSettingStore"
+import { BsEmojiSmile } from 'react-icons/bs'
+import { IoIosAttach } from 'react-icons/io'
 
 const UserChat = () => {
   const isChatOpen = useLayoutStore(state => state.isChatOpen)
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
+  const darkMode = useUserSettingStore(state => state.darkMode)
   const [messageText, setMessageText] = useState('')
 
   useEffect(() => {
@@ -90,6 +96,27 @@ const UserChat = () => {
                 <RiSendPlane2Fill />
               </button>
             </form>
+
+            <div
+              className="relative flex items-center justify-center text-gray-500 dark:text-dark-blue  rounded-lg w-12 h-10 text-xl transition-all duration-300 hover:bg-primary dark:hover:bg-sidebar-dark-primary dark:hover:text-white ml-1 cursor-pointer"
+            >
+              <IoIosAttach
+                className="text-xl w-[42px]"
+              />
+            </div>
+
+            <div
+              className="relative flex items-center justify-center text-gray-500 dark:text-dark-blue  rounded-lg w-12 h-10 text-xl transition-all duration-300 hover:bg-primary dark:hover:bg-sidebar-dark-primary dark:hover:text-white cursor-pointer"
+            >
+              <BsEmojiSmile
+                className="text-xl w-[42px]"
+              />
+              <div
+                className="absolute right-0 bottom-[240px] h-full flex items-center justify-center"
+              >
+                {/* <Picker onEmojiSelect={console.log} data={data} theme={darkMode ? 'dark' : 'light'} /> */}
+              </div>
+            </div>
           </div>
 
         </motion.div>}
