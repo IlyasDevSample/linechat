@@ -16,6 +16,8 @@ const UserChat = () => {
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
   const darkMode = useUserSettingStore(state => state.darkMode)
   const [messageText, setMessageText] = useState('')
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false)
+  const [isCLickOutside, setIsClickOutside] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,6 +31,16 @@ const UserChat = () => {
     handleResize()
     return () => window.removeEventListener('resize', handleResize)
   }, [setIsChatOpen])
+
+  const handleClickOutside = () => {
+    console.log('clicked outside', isEmojiOpen, isCLickOutside)
+    
+    if (isEmojiOpen && isCLickOutside) {
+      setIsEmojiOpen(false)
+    }else{
+      setIsClickOutside(true)
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -98,24 +110,42 @@ const UserChat = () => {
             </form>
 
             <div
-              className="relative flex items-center justify-center text-gray-500 dark:text-dark-blue  rounded-lg w-12 h-10 text-xl transition-all duration-300 hover:bg-primary dark:hover:bg-sidebar-dark-primary dark:hover:text-white ml-1 cursor-pointer"
+              className="relative ml-1"
             >
-              <IoIosAttach
-                className="text-xl w-[42px]"
-              />
+              <div
+                className="flex items-center justify-center text-gray-500 dark:text-dark-blue  rounded-lg w-[42px] h-10 text-xl transition-all duration-300 hover:bg-primary dark:hover:bg-sidebar-dark-primary dark:hover:text-white cursor-pointer"
+                onClick={() => {
+                  setIsEmojiOpen((prev) => !prev)
+                  setIsClickOutside(false)
+                }}
+                tabIndex={0}
+              >
+                <BsEmojiSmile
+                  className="text-xl"
+                />
+              </div>
+              <AnimatePresence>
+                {isEmojiOpen &&
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.1 }}
+                    tabIndex={0}
+                    className="absolute right-0 bottom-[247px] h-full flex items-center justify-center"
+                  >
+                    <Picker onClickOutside={handleClickOutside} onEmojiSelect={(emoji: any) => { setMessageText(messageText + emoji.native) }} data={data} theme={darkMode ? 'dark' : 'light'} />
+                  </motion.div>
+                }
+              </AnimatePresence>
             </div>
 
             <div
               className="relative flex items-center justify-center text-gray-500 dark:text-dark-blue  rounded-lg w-12 h-10 text-xl transition-all duration-300 hover:bg-primary dark:hover:bg-sidebar-dark-primary dark:hover:text-white cursor-pointer"
             >
-              <BsEmojiSmile
+              <IoIosAttach
                 className="text-xl w-[42px]"
               />
-              <div
-                className="absolute right-0 bottom-[240px] h-full flex items-center justify-center"
-              >
-                {/* <Picker onEmojiSelect={console.log} data={data} theme={darkMode ? 'dark' : 'light'} /> */}
-              </div>
             </div>
           </div>
 
