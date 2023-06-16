@@ -32,9 +32,7 @@ const UserChat = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [setIsChatOpen])
 
-  const handleClickOutside = () => {
-    console.log('clicked outside', isEmojiOpen, isCLickOutside)
-    
+  const handleClickOutside = () => {  
     if (isEmojiOpen && isCLickOutside) {
       setIsEmojiOpen(false)
     }else{
