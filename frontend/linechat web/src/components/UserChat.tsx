@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useLayoutStore } from "../stores/layoutStore"
 import UserInfoBar from "./UserInfoBar"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Message from "./Message"
 import SimpleBar from "simplebar-react"
 import { RiSendPlane2Fill } from 'react-icons/ri'
@@ -9,6 +9,7 @@ import { RiSendPlane2Fill } from 'react-icons/ri'
 const UserChat = () => {
   const isChatOpen = useLayoutStore(state => state.isChatOpen)
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
+  const [messageText, setMessageText] = useState('')
 
   useEffect(() => {
     const handleResize = () => {
@@ -76,12 +77,15 @@ const UserChat = () => {
               className='flex justify-center items-center bg-tertiary dark:bg-sidebar-dark-primary dark:text-dark-blue rounded-md w-full'
             >
               <input type="text"
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                name="message-text"
                 className="text-txt-dark dark:text-light-gray bg-transparent outline-none w-full py-2 px-4 -ml-[1px] text-[.875rem] font-normal  dark:text-txt-dark-primary dark:placeholder:text-dark-blue placeholder:text-sm placeholder:text-txt-gray-2 placeholder:leading-5 h-[40px] placeholder:capitalize"
                 placeholder="Type a message"
               />
               <button
                 type="submit"
-                className="outline-none flex items-center justify-center text-gray-500 dark:text-dark-blue  rounded-lg mr-2 w-9 h-8 text-xl transition-all duration-300 hover:bg-quaternary-blue dark:hover:bg-quaternary-dark-blue hover:text-white dark:hover:text-white"
+                className={"outline-none flex items-center justify-center text-gray-500 dark:text-dark-blue  rounded-lg mr-2 w-9 h-8 text-xl transition-all duration-300 hover:bg-quaternary-blue dark:hover:bg-quaternary-dark-blue hover:text-white dark:hover:text-white" + (messageText.length > 0 ? ' bg-quaternary-blue dark:bg-quaternary-dark-blue text-white dark:text-white' : '')}
               >
                 <RiSendPlane2Fill />
               </button>
