@@ -98,14 +98,14 @@ const UserChat = () => {
             last
           </SimpleBar>
           <div
-            className="border-t border-gray-200 dark:border-sidebar-dark-primary w-full h-16 flex items-center justify-stretch py-2 px-2 md:px-4 absolute bottom-0 left-0 right-0"
+            className="border-t border-gray-200 dark:border-sidebar-dark-primary w-full h-16 flex items-center justify-stretch py-2 px-2 md:px-4 absolute bottom-[0rem] left-0 right-0 bg-white dark:bg-chat-dark-primary"
           >
             <form
               autoComplete="off"
               noValidate
               className='flex justify-center items-center bg-tertiary dark:bg-sidebar-dark-primary dark:text-dark-blue rounded-md w-full'
             >
-              <input type="text"
+              <input type="search"
                 ref={inputRef}
                 value={messageText}
                 onChange={(e) => setMessageText(e.target.value)}
