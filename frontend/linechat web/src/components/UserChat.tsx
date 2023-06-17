@@ -64,38 +64,24 @@ const UserChat = () => {
         >
           <UserInfoBar />
           <SimpleBar
-            className={"w-full flex flex-col justify-end items-center h-[calc(100vh-4rem)] overflow-y-auto pt-[74px]"}
+            
+            className={"w-full flex flex-col justify-end items-center h-[calc(100vh-4rem)] overflow-y-auto pt-[74px] px-4"}
           >
-            first
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            last
+            <Message message="Hi master" isUser fullName="ilyas" showAvatar/>
+            <Message message="Hi master" fullName="darth vader" />
+            <Message message="i will do it" fullName="darth vader" />
+            <Message message="Okay my masterLorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate nemo repellat laboriosam optio facilis praesentium quam culpa cumque est, similique nulla, tempore quia quibusdam perspiciatis eaque hic consequatur, dicta illo. Voluptas ducimus optio labore voluptatum suscipit nulla reprehenderit aliquid nesciunt quae sed at ullam quo amet soluta tenetur, iure, enim cum consectetur quis laudantium dignissimos saepe quas est aliquam! Minus sequi magnam molestiae provident? Ullam veniam, voluptate, non nobis cum excepturi ea quos odit fugit a harum aspernatur temporibus ipsam maiores nisi voluptatem, vel quis praesentium. Placeat non itaque blanditiis, iste autem quos modi? Vel voluptatem cum possimus assumenda et!" fullName="darth vader" showAvatar/>
+            <Message message="aliquid nesciunt quae sed at ullam quo amet soluta tenetur, iure, enim cum consectetur quis laudantium dignissimos saepe quas est aliquam! Minus sequi magnam molestiae provident? Ullam veniam, voluptate, non nobis cum excepturi ea quos odit fugit a harum aspernatur temporibus ipsam maiores nisi voluptatem, vel quis praesentium. Placeat non itaque blanditiis, iste autem quos modi? Vel voluptatem cum possimus assumenda et!" isUser fullName="ilyas" showAvatar/>
+            <Message message="ok i will see" fullName="darth vader" showAvatar/>
+            <Message message="Hi master" isUser fullName="ilyas" showAvatar/>
+            <Message message="Hi master" fullName="darth vader" />
+            <Message message="i will do it" fullName="darth vader" />
+            <Message message="Okay my master" fullName="darth vader" showAvatar/>
+            <Message message="done" isUser fullName="ilyas" showAvatar/>
+            <Message message="Hi master" fullName="darth vader" />
+            <Message message="i will do it" fullName="darth vader" />
+            <Message message="Okay my master" fullName="darth vader" showAvatar/>
+
           </SimpleBar>
           <div
             className="border-t border-gray-200 dark:border-sidebar-dark-primary w-full h-16 flex items-center justify-stretch py-2 px-2 md:px-4 absolute bottom-[0rem] left-0 right-0 bg-white dark:bg-chat-dark-primary"

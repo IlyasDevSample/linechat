@@ -22,7 +22,7 @@ const Search = ({ placeholder, title }: Props) => {
         >
           <RiSearch2Line />
         </span>
-        <input type="text"
+        <input type="search"
           className="bg-transparent outline-none w-full py-2 px-4 -ml-[1px] text-[.875rem] font-normal text-txt-dark dark:text-txt-dark-primary dark:placeholder:text-dark-blue placeholder:text-sm placeholder:text-txt-gray-2 placeholder:leading-5 h-[45px] dark:text-dark-blue placeholder:capitalize"
           placeholder={placeholder}
         />
