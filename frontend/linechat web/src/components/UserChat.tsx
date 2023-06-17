@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useLayoutStore } from "../stores/layoutStore"
 import UserInfoBar from "./UserInfoBar"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Message from "./Message"
 import SimpleBar from "simplebar-react"
 import { RiSendPlane2Fill } from 'react-icons/ri'
@@ -18,6 +18,7 @@ const UserChat = () => {
   const [messageText, setMessageText] = useState('')
   const [isEmojiOpen, setIsEmojiOpen] = useState(false)
   const [isCLickOutside, setIsClickOutside] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,10 +33,10 @@ const UserChat = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [setIsChatOpen])
 
-  const handleClickOutside = () => {  
+  const handleClickOutside = () => {
     if (isEmojiOpen && isCLickOutside) {
       setIsEmojiOpen(false)
-    }else{
+    } else {
       setIsClickOutside(true)
     }
   }
@@ -86,13 +87,14 @@ const UserChat = () => {
             last
           </SimpleBar>
           <div
-            className="border-t border-gray-200 dark:border-sidebar-dark-primary w-full h-16 flex items-center justify-stretch py-2 px-4"
+            className="border-t border-gray-200 dark:border-sidebar-dark-primary w-full h-16 flex items-center justify-stretch py-2 px-2 md:px-4"
           >
             <form
               noValidate
               className='flex justify-center items-center bg-tertiary dark:bg-sidebar-dark-primary dark:text-dark-blue rounded-md w-full'
             >
               <input type="text"
+                ref={inputRef}
                 value={messageText}
                 onChange={(e) => setMessageText(e.target.value)}
                 name="message-text"
@@ -132,7 +134,12 @@ const UserChat = () => {
                     tabIndex={0}
                     className="absolute right-0 bottom-[247px] h-full flex items-center justify-center"
                   >
-                    <Picker onClickOutside={handleClickOutside} onEmojiSelect={(emoji: any) => { setMessageText(messageText + emoji.native) }} data={data} theme={darkMode ? 'dark' : 'light'} />
+                    <Picker
+                      onClickOutside={handleClickOutside}
+                      onEmojiSelect={(emoji: any) => { setMessageText(messageText + emoji.native) }} data={data}
+                      theme={darkMode ? 'dark' : 'light'}
+                      autoFocus={inputRef.current?.focus()}
+                    />
                   </motion.div>
                 }
               </AnimatePresence>
@@ -146,7 +153,6 @@ const UserChat = () => {
               />
             </div>
           </div>
-
         </motion.div>}
     </AnimatePresence>
   )
