@@ -19,13 +19,16 @@ const UserChat = () => {
   const [isEmojiOpen, setIsEmojiOpen] = useState(false)
   const [isCLickOutside, setIsClickOutside] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
+  const [ isMobile, setIsMobile ] = useState(false)
+  
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 992) {
         setIsChatOpen(true)
+        setIsMobile(false)
       } else {
         setIsChatOpen(false)
+        setIsMobile(true)
       }
     }
     window.addEventListener('resize', handleResize)
@@ -133,7 +136,7 @@ const UserChat = () => {
                     exit={{ opacity: 0, y: 20 }}
                     transition={{ duration: 0.1 }}
                     tabIndex={0}
-                    className="absolute right-0 bottom-[247px] h-full flex items-center justify-center"
+                    className={`absolute ${!isMobile ? 'right-0 bottom-[247px]' : 'right-[-45px] bottom-[247px]'} h-full flex items-center justify-center`}
                   >
                     <Picker
                       onClickOutside={handleClickOutside}
