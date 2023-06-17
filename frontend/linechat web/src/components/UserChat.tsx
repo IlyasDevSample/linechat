@@ -10,8 +10,11 @@ import Picker from '@emoji-mart/react'
 import { useUserSettingStore } from "../stores/userSettingStore"
 import { BsEmojiSmile } from 'react-icons/bs'
 import { IoIosAttach } from 'react-icons/io'
+import { useWindowSize } from 'usehooks-ts'
+
 
 const UserChat = () => {
+  const { width } = useWindowSize()
   const isChatOpen = useLayoutStore(state => state.isChatOpen)
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
   const darkMode = useUserSettingStore(state => state.darkMode)
@@ -23,7 +26,7 @@ const UserChat = () => {
   
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 992) {
+      if (width > 992) {
         setIsChatOpen(true)
         setIsMobile(false)
       } else {
@@ -31,10 +34,15 @@ const UserChat = () => {
         setIsMobile(true)
       }
     }
-    window.addEventListener('resize', handleResize)
-    handleResize()
+    if (width > 992) {
+      handleResize()
+      window.addEventListener('resize', handleResize)
+    }else {
+      handleResize()
+    }
+    
     return () => window.removeEventListener('resize', handleResize)
-  }, [setIsChatOpen])
+  }, [setIsChatOpen, isMobile, width])
 
   const handleClickOutside = () => {
     if (isEmojiOpen && isCLickOutside) {
@@ -90,7 +98,7 @@ const UserChat = () => {
             last
           </SimpleBar>
           <div
-            className="border-t border-gray-200 dark:border-sidebar-dark-primary w-full h-16 flex items-center justify-stretch py-2 px-2 md:px-4"
+            className="border-t border-gray-200 dark:border-sidebar-dark-primary w-full h-16 flex items-center justify-stretch py-2 px-2 md:px-4 absolute bottom-0 left-0 right-0"
           >
             <form
               autoComplete="off"

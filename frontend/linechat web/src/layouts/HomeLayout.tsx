@@ -8,12 +8,12 @@ import { AnimatePresence } from 'framer-motion'
 
 const HomeLayout = () => {
   useTitle()
-  useAuthorize()
+  // useAuthorize()
 
   const bearerToken = useAuthStore((state) => state.bearerToken)
-  if (!bearerToken) {
-    return null
-  }
+  // if (!bearerToken) {
+  //   return null
+  // }
 
   return (
     <div className='bg-primary dark:bg-contact-dark-primary h-screen max-h-screen w-full overflow-hidden flex'>
