@@ -91,7 +91,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<GroupMember> groupMemberships;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_conversations",
             joinColumns = @JoinColumn(name = "user_id"), // this table
