@@ -31,7 +31,9 @@ public class Conversation {
     @LastModifiedDate
     private Date updatedAt;
 
-    @ManyToMany(mappedBy = "conversations")
+    @ManyToMany(mappedBy = "conversations"
+            , cascade = {CascadeType.ALL}
+            , fetch = FetchType.EAGER)
     private List<User> users;
 
     @OneToMany(mappedBy = "conversation")
