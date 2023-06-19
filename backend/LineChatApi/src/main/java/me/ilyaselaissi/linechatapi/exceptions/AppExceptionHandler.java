@@ -1,6 +1,8 @@
 package me.ilyaselaissi.linechatapi.exceptions;
 
 import me.ilyaselaissi.linechatapi.dto.StatusResponseDTO;
+import me.ilyaselaissi.linechatapi.exceptions.core.InvalidFieldException;
+import me.ilyaselaissi.linechatapi.exceptions.message.MessageException;
 import me.ilyaselaissi.linechatapi.exceptions.token.InvalidTokenException;
 import me.ilyaselaissi.linechatapi.exceptions.token.JwtException;
 import me.ilyaselaissi.linechatapi.exceptions.user.DuplicateUserException;
@@ -37,5 +39,19 @@ public class AppExceptionHandler {
         StatusResponseDTO statusResponseDTO =
                 new StatusResponseDTO("error", e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(statusResponseDTO);
+    }
+
+    @ExceptionHandler(value = {InvalidFieldException.class, MessageException.class})
+    public ResponseEntity<StatusResponseDTO> handleInvalidFieldException(Exception e) {
+        StatusResponseDTO statusResponseDTO =
+                new StatusResponseDTO("error", e.getMessage());
+        return ResponseEntity.badRequest().body(statusResponseDTO);
+    }
+
+    @ExceptionHandler(value = {IllegalStateException.class})
+    public ResponseEntity<StatusResponseDTO> handleIllegalStateException(Exception e) {
+        StatusResponseDTO statusResponseDTO =
+                new StatusResponseDTO("error", e.getMessage());
+        return ResponseEntity.badRequest().body(statusResponseDTO);
     }
 }
