@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MessageStatusRepository extends JpaRepository<MessageStatus, Long> {
+    MessageStatus findByStatus(String pending);
 }
