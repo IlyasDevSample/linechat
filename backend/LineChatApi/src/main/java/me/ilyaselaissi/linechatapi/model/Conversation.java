@@ -36,6 +36,9 @@ public class Conversation {
             , fetch = FetchType.EAGER)
     private List<User> users;
 
-    @OneToMany(mappedBy = "conversation")
+    @OneToMany(
+            mappedBy = "conversation",
+            fetch = FetchType.EAGER
+    )
     private List<Message> messages;
 }
