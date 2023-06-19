@@ -83,7 +83,6 @@ public class MessageServiceImpl implements MessageService {
             userRepository.save(sender);
             userRepository.save(receiver);
         }
-
         return conversation;
     }
 
