@@ -15,7 +15,6 @@ import me.ilyaselaissi.linechatapi.repository.MessageStatusRepository;
 import me.ilyaselaissi.linechatapi.repository.UserRepository;
 import me.ilyaselaissi.linechatapi.util.DataValidator;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
