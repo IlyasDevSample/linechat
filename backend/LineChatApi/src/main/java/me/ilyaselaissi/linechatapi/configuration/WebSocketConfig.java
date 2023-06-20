@@ -13,10 +13,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Value("${app.frontend-url}")
     private String FRONTEND_URL;
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // websocket endpoint for the client
-        registry.addEndpoint("/chat-ws").setAllowedOriginPatterns(FRONTEND_URL).withSockJS();
+        registry
+                .addEndpoint("/ws")
+                .setAllowedOrigins(FRONTEND_URL)
+                .withSockJS();
     }
 
     @Override
