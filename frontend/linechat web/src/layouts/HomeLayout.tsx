@@ -5,12 +5,20 @@ import SideBar from '../components/SideBar'
 import { Outlet } from 'react-router-dom'
 import UserChat from '../components/UserChat'
 import { AnimatePresence } from 'framer-motion'
+import { useEffect } from 'react'
 
 const HomeLayout = () => {
   useTitle()
   useAuthorize()
-
   const bearerToken = useAuthStore((state) => state.bearerToken)
+
+  useEffect(() => {
+
+    return () => {
+      console.log('disconnect')
+    }
+  }, [])
+
   if (!bearerToken) {
     return null
   }
