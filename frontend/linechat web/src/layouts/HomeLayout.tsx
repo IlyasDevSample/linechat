@@ -6,6 +6,8 @@ import { Outlet } from 'react-router-dom'
 import UserChat from '../components/UserChat'
 import { AnimatePresence } from 'framer-motion'
 import { useEffect } from 'react'
+import { over } from 'stompjs';
+import SockJS from 'sockjs-client';
 
 const HomeLayout = () => {
   useTitle()
@@ -13,9 +15,18 @@ const HomeLayout = () => {
   const bearerToken = useAuthStore((state) => state.bearerToken)
 
   useEffect(() => {
+    const ws = SockJS("http://localhost:8080/ws");
+    const client = over(ws);
+    client.connect({}, function (frame) {
+      console.log('Connected: ' + frame);
+    });
 
     return () => {
-      console.log('disconnect')
+      try {
+        client.disconnect(() => console.log("Disconnected"));
+      }catch (error) {
+        console.log(error);
+      }
     }
   }, [])
 

@@ -12,6 +12,7 @@
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
+    "@types/sockjs-client": "^1.5.1",
     "axios": "^1.4.0",
     "emoji-mart": "^5.5.2",
     "framer-motion": "^10.12.16",
@@ -24,7 +25,8 @@
     "react-toastify": "^9.1.3",
     "react-tooltip": "^5.13.1",
     "simplebar-react": "^3.2.4",
-    "socket.io-client": "^4.6.2",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
     "swiper": "^9.4.1",
     "usehooks-ts": "^2.9.1",
     "zustand": "^4.3.8"
@@ -33,6 +35,7 @@
     "@types/node": "^20.2.5",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
+    "@types/stompjs": "^2.3.5",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "@vitejs/plugin-react": "^4.0.0",
