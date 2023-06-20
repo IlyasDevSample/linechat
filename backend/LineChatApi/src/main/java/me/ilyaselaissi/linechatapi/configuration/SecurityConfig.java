@@ -1,4 +1,4 @@
-package me.ilyaselaissi.linechatapi.config;
+package me.ilyaselaissi.linechatapi.configuration;
 
 import me.ilyaselaissi.linechatapi.repository.UserRepository;
 import me.ilyaselaissi.linechatapi.security.JwtAuthenticationFilter;
