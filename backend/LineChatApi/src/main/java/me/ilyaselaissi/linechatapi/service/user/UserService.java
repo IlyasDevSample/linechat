@@ -17,4 +17,6 @@ public interface UserService {
     void forgotPassword(String email);
 
     void resetPassword(ResetPasswordDTO resetPasswordDTO);
+
+    User getUserDetails(String currentPrincipalName);
 }

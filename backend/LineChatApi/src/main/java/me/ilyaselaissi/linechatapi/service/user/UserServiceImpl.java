@@ -51,6 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserDetails(String currentPrincipalName) {
+        if (currentPrincipalName == null) {
+            throw new InvalidUserException("Invalid user");
+        }
+        return userRepository.findByUsername(currentPrincipalName);
+    }
+
+    @Override
     public User register(UserDTO userDTO) {
         //  validate user fields
         validateField(userDTO.fullName(), "Full name");
