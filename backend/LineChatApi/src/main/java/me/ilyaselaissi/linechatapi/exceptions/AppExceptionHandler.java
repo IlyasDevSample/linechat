@@ -48,7 +48,7 @@ public class AppExceptionHandler {
         return ResponseEntity.badRequest().body(statusResponseDTO);
     }
 
-    @ExceptionHandler(value = {IllegalStateException.class})
+    @ExceptionHandler(value = {IllegalStateException.class, RuntimeException.class})
     public ResponseEntity<StatusResponseDTO> handleIllegalStateException(Exception e) {
         StatusResponseDTO statusResponseDTO =
                 new StatusResponseDTO("error", e.getMessage());
