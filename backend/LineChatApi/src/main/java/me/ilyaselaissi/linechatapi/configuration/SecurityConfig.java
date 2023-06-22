@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthorizationFilter(userRepository, jwtSecretKey), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/account/**").permitAll()
-                .requestMatchers("/ws/**").permitAll()
+//                .requestMatchers("/ws/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
