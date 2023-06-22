@@ -9,6 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import me.ilyaselaissi.linechatapi.model.User;
 import me.ilyaselaissi.linechatapi.repository.UserRepository;
 import me.ilyaselaissi.linechatapi.util.TokenGenerator;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +34,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // get the authorization header token from the request
         String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null) {
+            // get the token from the query parameter for websocket connection
+            authorizationHeader = request.getParameter("token");
+        }
         // check if the authorization header is null or not
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
