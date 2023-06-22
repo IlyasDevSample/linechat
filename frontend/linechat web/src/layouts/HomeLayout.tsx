@@ -8,29 +8,53 @@ import { AnimatePresence } from 'framer-motion'
 import { useEffect } from 'react'
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
+import { useUserStore } from '../stores/userStore'
+import axios from 'axios'
+import { UserDetails } from '../types/userDetailsType'
+import { useNavigate } from 'react-router-dom'
 
 const HomeLayout = () => {
   useTitle()
   useAuthorize()
+  const navigate = useNavigate()
   const bearerToken = useAuthStore((state) => state.bearerToken)
+  const clearBearerToken = useAuthStore((state) => state.clearBearerToken)
+  const setUserDetails = useUserStore((state) => state.setUserDetails)
+  const UserDetails = useUserStore((state) => state.UserDetails)
 
   useEffect(() => {
     if (!bearerToken) return;
-    const ws = SockJS("http://localhost:8080/ws");
+
+    axios.get<UserDetails>(import.meta.env.VITE_API_URL + "/profile/details", {
+      headers: {
+        Authorization: bearerToken
+      }
+    })
+      .then((res) => {
+        const userDetails: UserDetails = res.data
+        setUserDetails(userDetails)
+      }).catch((err) => {
+        console.log("error", err);
+        if (err.response?.status === 401) {
+          clearBearerToken()
+          navigate('/login', { replace: true })
+        }
+      })
+
+  }, [bearerToken, setUserDetails, clearBearerToken, navigate])
+
+  useEffect(() => {
+    if (!bearerToken || !UserDetails) return;
+
+    const ws = SockJS(import.meta.env.VITE_SERVER_URL + "/ws?token=" + bearerToken);
     const client = over(ws);
-    client.connect({
-      Authorization: "bearerToken"
-    }, function (frame) {
-      client.subscribe("/topic/public", function (message) {
+    if (client.connected) return;
+    client.connect({}, () => {
+      client.subscribe("/topic/user/" + UserDetails.username, function (message) {
         console.log(message);
       })
-      // send message
-      client.send("/app/send", {}, JSON.stringify({
-        sender: "sender",
-        content: "content",
-        type: "CHAT"
-      }));
     });
+
     return () => {
       try {
         client.disconnect(() => console.log("Disconnected"));
@@ -38,7 +62,7 @@ const HomeLayout = () => {
         console.log(error);
       }
     }
-  }, [bearerToken])
+  }, [bearerToken, UserDetails])
 
   if (!bearerToken) {
     return null
