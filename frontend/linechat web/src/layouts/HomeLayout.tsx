@@ -15,20 +15,30 @@ const HomeLayout = () => {
   const bearerToken = useAuthStore((state) => state.bearerToken)
 
   useEffect(() => {
+    if (!bearerToken) return;
     const ws = SockJS("http://localhost:8080/ws");
     const client = over(ws);
-    client.connect({}, function (frame) {
-      console.log('Connected: ' + frame);
+    client.connect({
+      Authorization: "bearerToken"
+    }, function (frame) {
+      client.subscribe("/topic/public", function (message) {
+        console.log(message);
+      })
+      // send message
+      client.send("/app/send", {}, JSON.stringify({
+        sender: "sender",
+        content: "content",
+        type: "CHAT"
+      }));
     });
-
     return () => {
       try {
         client.disconnect(() => console.log("Disconnected"));
-      }catch (error) {
+      } catch (error) {
         console.log(error);
       }
     }
-  }, [])
+  }, [bearerToken])
 
   if (!bearerToken) {
     return null
