@@ -10,7 +10,12 @@ import { useEffect, useState } from 'react'
 import ProfileImg from './ProfileImg'
 import { useUserSettingStore } from '../stores/userSettingStore'
 
-const SideBar = () => {
+interface SideBarProps {
+  fullName?: string
+  avatarUrl?: string
+}
+
+const SideBar = ({ fullName, avatarUrl} : SideBarProps) => {
   const [showMenu, setShowMenu] = useState(false)
   const darkMode = useUserSettingStore((state) => state.darkMode)
   const setDarkMode = useUserSettingStore((state) => state.setDarkMode)
@@ -153,7 +158,7 @@ const SideBar = () => {
                 onBlur={() => setShowMenu(false)}
                 tabIndex={0}
               >
-                <ProfileImg name='John Doe' avatar={avatar} />
+                <ProfileImg name={fullName ? fullName : ''} avatar={avatarUrl && avatarUrl}/>
               </div>
               <AnimatePresence>
                 {showMenu && <Menu />}

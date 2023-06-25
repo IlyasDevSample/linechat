@@ -19,6 +19,7 @@ const HomeLayout = () => {
   const [isConnected, setIsConnected] = useState(false)
   const [client, setClient] = useState<Client>()
   const setUserDetails = useUserStore((state) => state.setUserDetails)
+  const userDetails = useUserStore((state) => state.UserDetails)
 
   useEffect(() => {
     if (!bearerToken) return;
@@ -63,8 +64,8 @@ const HomeLayout = () => {
 
   return (
     <div className='bg-primary dark:bg-contact-dark-primary h-screen max-h-screen w-full overflow-hidden flex'>
-      <SideBar />
-      {isConnected ? <div>Connected</div> : <div>Not Connected</div>}
+      <SideBar fullName={userDetails?.fullName} avatarUrl={userDetails?.AvatarUrl} />
+      {/* {isConnected ? <div>Connected</div> : <div>Not Connected</div>} */}
       <main
         className='flex flex-row w-full overflow-hidden'
         onClick={() => {
