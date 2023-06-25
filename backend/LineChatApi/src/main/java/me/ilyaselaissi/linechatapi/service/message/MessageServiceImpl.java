@@ -59,6 +59,13 @@ public class MessageServiceImpl implements MessageService {
         return messageToSave;
     }
 
+    @Override
+    public List<Conversation> getConversations(String username) {
+        User user = validateUserExists(username, "User");
+        List<Conversation> conversations = user.getConversations();
+        return conversations;
+    }
+
     private Conversation findConversation(User sender, User receiver) {
         List<Conversation> senderConversations = sender.getConversations();
         List<Conversation> receiverConversations = receiver.getConversations();
