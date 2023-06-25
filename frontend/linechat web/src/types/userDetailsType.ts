@@ -5,6 +5,6 @@ export type UserDetails = {
   status: string;
   lastActive: Date;
   createdAt: Date;
-  AvatarUrl: null;
+  AvatarUrl: string;
   isEmailVerified: boolean;
 }
