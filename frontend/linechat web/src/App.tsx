@@ -12,6 +12,9 @@ import People from './pages/People'
 import Groups from './pages/Groups'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
+import { QueryClientProvider, QueryClient } from 'react-query'
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/">
@@ -36,7 +39,9 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 const App = () => {
   return (
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   )
 }
 
