@@ -25,20 +25,19 @@ const HomeLayout = () => {
   
   useEffect(() => {
     if (!bearerToken) return;
-    
-    function onConnect() {
-      setIsConnected(true);
-      axios.get<UserDetails>(import.meta.env.VITE_API_URL+"/profile/details",
+    axios.get<UserDetails>(import.meta.env.VITE_API_URL+"/profile/details",
       {
         headers: {
           Authorization: bearerToken
         }
       }).then((response) => {
         setUserDetails(response.data);
-        
       }).catch((error) => {
         console.log(error);
       })
+    
+    function onConnect() {
+      setIsConnected(true);
     }
 
     function onDisconnect() {
@@ -59,11 +58,11 @@ const HomeLayout = () => {
         ws.close()
       }
     }
-    
   }, [bearerToken, setUserDetails])
 
   useEffect(() => {
-    if (!client || !userDetails || !client.connected) return;
+    if (!userDetails || !client?.connected) return;
+    if (Object.keys(client?.subscriptions).length > 0) return;
     client.subscribe("/topic/user/"+userDetails?.username, (message) => {
       console.log("message received");
     })
@@ -72,9 +71,8 @@ const HomeLayout = () => {
       client.unsubscribe("/topic/user/"+userDetails?.username);
       setIsOnline(false);
     }
-
-  }, [client, userDetails])
-
+  }, [client, userDetails, isConnected])
+ 
   useEffect(() => {
     if (!client || !userDetails || !client.connected) return;
     if (Object.keys(client?.subscriptions).length > 0) {
@@ -82,15 +80,24 @@ const HomeLayout = () => {
     }else {
       setIsOnline(false);
     }
-  }, [client, userDetails])
-  
+  }, [client, userDetails, isConnected])
+
+  console.log(isOnline);
+
+
   if (!bearerToken) {
     return null
+  }
+  if (!isOnline) {
+    return (
+      <div>
+        Connecting...
+      </div>
+    )
   }
   return (
     <div className='bg-primary dark:bg-contact-dark-primary h-screen max-h-screen w-full overflow-hidden flex'>
       <SideBar fullName={userDetails?.fullName} avatarUrl={userDetails?.AvatarUrl} />
-      {/* {isConnected ? <div>Connected</div> : <div>Not Connected</div>} */}
       <main
         className='flex flex-row w-full overflow-hidden'
         onClick={() => {
