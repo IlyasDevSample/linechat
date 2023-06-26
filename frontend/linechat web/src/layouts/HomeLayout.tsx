@@ -54,7 +54,11 @@ const HomeLayout = () => {
     client.connect({}, onConnect, onDisconnect);
 
     return () => {
-      client.disconnect(onDisconnect);
+      if (client.connected) {
+        client.disconnect(onDisconnect);
+      }else {
+        ws.close()
+      }
     }
     
   }, [bearerToken, setUserDetails])
