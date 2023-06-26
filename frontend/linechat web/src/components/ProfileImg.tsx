@@ -1,5 +1,5 @@
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import { useUserSettingStore } from "../stores/userSettingStore"
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
 
 type Props = {
@@ -43,7 +43,7 @@ const ProfileImg = ({ name, avatar, size= 'md', isLoading}: Props) => {
     }
     if (darkMode) {
       return (
-        <SkeletonTheme baseColor="#2E363E" highlightColor="#36404A">
+        <SkeletonTheme baseColor="#3E4A56" highlightColor="#36404A">
           <Skeleton circle={true} height={sizePX} width={sizePX} />
         </SkeletonTheme>
       )
