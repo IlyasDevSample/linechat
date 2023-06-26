@@ -29,13 +29,11 @@ const Recent = () => {
             <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='01:45 PM' />
           </>
         ) : (
-          <div>
-            <ChatSelectSkeleton />
-            <ChatSelectSkeleton />
-            <ChatSelectSkeleton />
-            <ChatSelectSkeleton />
-            <ChatSelectSkeleton />
-          </div>
+          <>
+            {Array(5).fill(0).map((_, i) => (
+              <ChatSelectSkeleton key={i} />
+            ))}
+          </>
         )
       }
       </SimpleBar>
