@@ -18,10 +18,11 @@ const HomeLayout = () => {
   useAuthorize()
   const bearerToken = useAuthStore((state) => state.bearerToken)
   const [isConnected, setIsConnected] = useState(false)
+  const [isOnline, setIsOnline] = useState(false)
   const [client, setClient] = useState<Client>()
   const setUserDetails = useUserStore((state) => state.setUserDetails)
   const userDetails = useUserStore((state) => state.UserDetails)
-
+  
   useEffect(() => {
     if (!bearerToken) return;
     
@@ -34,9 +35,7 @@ const HomeLayout = () => {
         }
       }).then((response) => {
         setUserDetails(response.data);
-        client?.subscribe("/topic/user/"+response.data.username, (message) => {
-          console.log("message received");
-        })
+        
       }).catch((error) => {
         console.log(error);
       })
@@ -63,10 +62,31 @@ const HomeLayout = () => {
     
   }, [bearerToken, setUserDetails])
 
+  useEffect(() => {
+    if (!client || !userDetails || !client.connected) return;
+    client.subscribe("/topic/user/"+userDetails?.username, (message) => {
+      console.log("message received");
+    })
+
+    return () => {
+      client.unsubscribe("/topic/user/"+userDetails?.username);
+      setIsOnline(false);
+    }
+
+  }, [client, userDetails])
+
+  useEffect(() => {
+    if (!client || !userDetails || !client.connected) return;
+    if (Object.keys(client?.subscriptions).length > 0) {
+      setIsOnline(true);
+    }else {
+      setIsOnline(false);
+    }
+  }, [client, userDetails])
+  
   if (!bearerToken) {
     return null
   }
-
   return (
     <div className='bg-primary dark:bg-contact-dark-primary h-screen max-h-screen w-full overflow-hidden flex'>
       <SideBar fullName={userDetails?.fullName} avatarUrl={userDetails?.AvatarUrl} />
