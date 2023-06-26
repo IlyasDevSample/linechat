@@ -11,6 +11,7 @@ import SockJS from 'sockjs-client';
 import axios from 'axios'
 import { useUserStore } from '../stores/userStore'
 import { UserDetails } from '../types/userDetailsType'
+import { Conversation } from '../types/conversationType'
 
 const HomeLayout = () => {
   useTitle()
