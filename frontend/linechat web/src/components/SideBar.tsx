@@ -1,6 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
 import brandLogo from '../assets/linechat_logo.png'
-import avatar from '../assets/avatar.png'
 import { RiGroupLine, RiUserLine, RiMessage3Line, RiSettingsLine, RiSunLine, RiMoonLine, RiTeamLine } from 'react-icons/ri'
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
@@ -13,9 +12,10 @@ import { useUserSettingStore } from '../stores/userSettingStore'
 interface SideBarProps {
   fullName?: string
   avatarUrl?: string
+  isLoading: boolean
 }
 
-const SideBar = ({ fullName, avatarUrl} : SideBarProps) => {
+const SideBar = ({ fullName, avatarUrl, isLoading} : SideBarProps) => {
   const [showMenu, setShowMenu] = useState(false)
   const darkMode = useUserSettingStore((state) => state.darkMode)
   const setDarkMode = useUserSettingStore((state) => state.setDarkMode)
@@ -158,7 +158,7 @@ const SideBar = ({ fullName, avatarUrl} : SideBarProps) => {
                 onBlur={() => setShowMenu(false)}
                 tabIndex={0}
               >
-                <ProfileImg name={fullName ? fullName : ''} avatar={avatarUrl && avatarUrl}/>
+                <ProfileImg name={fullName ? fullName : ''} avatar={avatarUrl && avatarUrl} isLoading={isLoading} />
               </div>
               <AnimatePresence>
                 {showMenu && <Menu />}

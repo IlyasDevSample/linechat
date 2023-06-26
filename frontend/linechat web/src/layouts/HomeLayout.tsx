@@ -82,22 +82,13 @@ const HomeLayout = () => {
     }
   }, [client, userDetails, isConnected])
 
-  console.log(isOnline);
-
-
   if (!bearerToken) {
     return null
   }
-  if (!isOnline) {
-    return (
-      <div>
-        Connecting...
-      </div>
-    )
-  }
+
   return (
     <div className='bg-primary dark:bg-contact-dark-primary h-screen max-h-screen w-full overflow-hidden flex'>
-      <SideBar fullName={userDetails?.fullName} avatarUrl={userDetails?.AvatarUrl} />
+      <SideBar fullName={userDetails?.fullName} avatarUrl={userDetails?.AvatarUrl} isLoading={!isOnline} />
       <main
         className='flex flex-row w-full overflow-hidden'
         onClick={() => {

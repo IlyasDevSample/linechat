@@ -1,10 +1,18 @@
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
+import { useLayoutStore } from "../stores/layoutStore"
+import { useUserSettingStore } from "../stores/userSettingStore"
+import 'react-loading-skeleton/dist/skeleton.css'
+
 type Props = {
   name: string
   avatar?: string
   size?: 'sm' | 'md' | 'lg'
+  isLoading?: boolean
 }
-const ProfileImg = ({ name, avatar, size= 'md' }: Props) => {
-  
+const ProfileImg = ({ name, avatar, size= 'md', isLoading}: Props) => {
+
+  const darkMode = useUserSettingStore(state => state.darkMode)
+
   const calcSize = () => {
     switch (size) {
       case 'sm':
@@ -17,6 +25,37 @@ const ProfileImg = ({ name, avatar, size= 'md' }: Props) => {
         return 'w-10 h-10'
     }
   }
+  if (isLoading) {
+    console.log(isLoading, darkMode)
+    let sizePX = 0
+    switch (size) {
+      case 'sm':
+        sizePX = 32
+        break
+      case 'md':
+        sizePX = 40
+        break
+      case 'lg':
+        sizePX = 48
+        break
+      default:
+        sizePX = 40
+        break
+    }
+    if (darkMode) {
+      return (
+        <SkeletonTheme baseColor="#262E35" highlightColor="#36404A">
+          <Skeleton circle={true} height={sizePX} width={sizePX} />
+        </SkeletonTheme>
+      )
+    } else {
+      return (
+        <Skeleton circle={true} height={sizePX} width={sizePX} />
+      )
+    }
+  }
+  
+  
 
   if (avatar) {
     return (
