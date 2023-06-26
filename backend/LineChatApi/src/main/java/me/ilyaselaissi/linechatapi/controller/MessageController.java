@@ -73,6 +73,7 @@ public class MessageController {
                     .toList();
 
             ConversationResponseDTO conversationResponse = new ConversationResponseDTO(
+                    conversation.getId().toString(),
                     otherUser.getUsername(),
                     otherUser.getFullName(),
                     otherUser.getUserStatus().getStatusType(),
