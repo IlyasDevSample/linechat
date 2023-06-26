@@ -6,6 +6,8 @@ type UserStore = {
   UserDetails: UserDetails | null
   setUserDetails: (userDetails: UserDetails) => void
   clearUserDetails: () => void
+  isOnline: boolean
+  setIsOnline: (isOnline: boolean) => void
 }
 
 const createStore :StateCreator<UserStore> = (set) => ({
@@ -15,6 +17,10 @@ const createStore :StateCreator<UserStore> = (set) => ({
   },
   clearUserDetails: () => {
     set({ UserDetails: null })
+  },
+  isOnline: false,
+  setIsOnline: (isOnline: boolean) => {
+    set({ isOnline: isOnline })
   }
 })
 

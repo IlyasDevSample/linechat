@@ -1,5 +1,4 @@
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
-import { useLayoutStore } from "../stores/layoutStore"
 import { useUserSettingStore } from "../stores/userSettingStore"
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -26,7 +25,7 @@ const ProfileImg = ({ name, avatar, size= 'md', isLoading}: Props) => {
     }
   }
   if (isLoading) {
-    console.log(isLoading, darkMode)
+    
     let sizePX = 0
     switch (size) {
       case 'sm':
@@ -44,7 +43,7 @@ const ProfileImg = ({ name, avatar, size= 'md', isLoading}: Props) => {
     }
     if (darkMode) {
       return (
-        <SkeletonTheme baseColor="#262E35" highlightColor="#36404A">
+        <SkeletonTheme baseColor="#2E363E" highlightColor="#36404A">
           <Skeleton circle={true} height={sizePX} width={sizePX} />
         </SkeletonTheme>
       )

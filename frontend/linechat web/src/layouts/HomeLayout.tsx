@@ -18,10 +18,11 @@ const HomeLayout = () => {
   useAuthorize()
   const bearerToken = useAuthStore((state) => state.bearerToken)
   const [isConnected, setIsConnected] = useState(false)
-  const [isOnline, setIsOnline] = useState(false)
   const [client, setClient] = useState<Client>()
   const setUserDetails = useUserStore((state) => state.setUserDetails)
   const userDetails = useUserStore((state) => state.UserDetails)
+  const isOnline = useUserStore((state) => state.isOnline)
+  const setIsOnline = useUserStore((state) => state.setIsOnline)
   
   useEffect(() => {
     if (!bearerToken) return;
@@ -71,7 +72,7 @@ const HomeLayout = () => {
       client.unsubscribe("/topic/user/"+userDetails?.username);
       setIsOnline(false);
     }
-  }, [client, userDetails, isConnected])
+  }, [client, userDetails, isConnected, setIsOnline])
  
   useEffect(() => {
     if (!client || !userDetails || !client.connected) return;
@@ -80,7 +81,7 @@ const HomeLayout = () => {
     }else {
       setIsOnline(false);
     }
-  }, [client, userDetails, isConnected])
+  }, [client, userDetails, isConnected, setIsOnline])
 
   if (!bearerToken) {
     return null
