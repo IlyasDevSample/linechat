@@ -3,7 +3,7 @@ import { devtools } from "zustand/middleware";
 import { Conversation } from "../types/conversationType";
 
 type ConversationStore = {
-  conversations: Conversation[]
+  conversations: Conversation[] | null
   setConversations: (conversations: Conversation[]) => void
   clearConversations: () => void
   selectedConversation: Conversation | null
@@ -12,13 +12,13 @@ type ConversationStore = {
 }
 
 const createStore :StateCreator<ConversationStore> = (set) => ({
-  conversations: [],
+  conversations: null,
   setConversations: (conversations: Conversation[]) => {
     set({ conversations: conversations })
   }
   ,
   clearConversations: () => {
-    set({ conversations: [] })
+    set({ conversations: null, selectedConversation: null })
   }
   ,
   selectedConversation: null,

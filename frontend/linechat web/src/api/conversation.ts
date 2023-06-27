@@ -4,8 +4,9 @@ import { QueryFunctionContext, useQuery } from 'react-query';
 
 
 async function fetchConversations({ queryKey }: QueryFunctionContext) {
- const [ _, username, bearerToken ] = queryKey
-  const response = await axios.get<Conversation[]>(import.meta.env.VITE_API_URL+"/message/conversations/"+username, {
+
+  const [_, username, bearerToken] = queryKey
+  const response = await axios.get<Conversation[]>(import.meta.env.VITE_API_URL + "/message/conversations/" + username, {
     headers: {
       Authorization: bearerToken as string,
     }

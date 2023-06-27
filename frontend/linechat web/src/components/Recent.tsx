@@ -8,16 +8,24 @@ import { useAuthStore } from '../stores/authStore';
 import { useEffect } from 'react';
 import { useConversationData } from '../api/conversation';
 import { Link } from 'react-router-dom';
+import { useConversationStore } from '../stores/conversationStore';
 
 const Recent = () => {
   const userDetails = useUserStore((state) => state.UserDetails)
   const bearerToken = useAuthStore((state) => state.bearerToken)
   const { data, isLoading, error, refetch } = useConversationData(userDetails?.username as string, bearerToken as string, false)
+  const conversations = useConversationStore((state) => state.conversations)
+  const setConversations = useConversationStore((state) => state.setConversations)
 
   useEffect(() => {
     if (!bearerToken || !userDetails) return
     refetch()
   }, [refetch, bearerToken, userDetails])
+
+  useEffect(() => {
+    if (!data) return
+    setConversations(data)
+  }, [data, setConversations])
 
   if (error) {
     return (
@@ -45,7 +53,7 @@ const Recent = () => {
     )
   }
 
-  if (data?.length === 0) {
+  if (conversations?.length === 0) {
     return (
       <div>
         <h5
@@ -86,7 +94,7 @@ const Recent = () => {
           </>
         ) : (
           <>
-            {data?.map((conversation, _) => (
+            {conversations?.map((conversation, _) => (
               <UserChatSelect
                 key={conversation.idConversation}
                 id={conversation.idConversation}

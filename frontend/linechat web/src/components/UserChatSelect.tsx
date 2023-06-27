@@ -1,3 +1,4 @@
+import { useConversationStore } from '../stores/conversationStore'
 import { useLayoutStore } from '../stores/layoutStore'
 import ProfileImg from './ProfileImg'
 import UserStatus from './UserStatus'
@@ -21,10 +22,15 @@ const truncateText = (text: string) => {
 
 const UserChatSelect = ({ name, status, message, time, avatar, id }: Props) => {
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
-
+  const conversations = useConversationStore((state) => state.conversations)
+  const setSelectedConversation = useConversationStore((state) => state.setSelectedConversation)
+  
   const handleClick = () => {
     setIsChatOpen(true)
-    console.log('clicked', id)
+    const conversation = conversations?.find((conversation) => conversation.idConversation === id)
+    if (conversation) {
+      setSelectedConversation(conversation)
+    }
   }
   
   return (
