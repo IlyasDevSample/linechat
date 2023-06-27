@@ -9,7 +9,7 @@ public record ConversationResponseDTO(
         String status,
         String lastActive,
         String createdAt,
-        String AvatarUrl,
+        String avatarUrl,
         List<MessageResponseDTO> messages,
         String lastMessage
         ) {
