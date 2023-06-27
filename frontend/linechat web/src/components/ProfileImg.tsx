@@ -8,7 +8,7 @@ type Props = {
   size?: 'sm' | 'md' | 'lg'
   isLoading?: boolean
 }
-const ProfileImg = ({ name, avatar, size= 'md', isLoading}: Props) => {
+const ProfileImg = ({ name, avatar, size = 'md', isLoading }: Props) => {
 
   const darkMode = useUserSettingStore(state => state.darkMode)
 
@@ -25,7 +25,7 @@ const ProfileImg = ({ name, avatar, size= 'md', isLoading}: Props) => {
     }
   }
   if (isLoading) {
-    
+
     let sizePX = 0
     switch (size) {
       case 'sm':
@@ -49,16 +49,18 @@ const ProfileImg = ({ name, avatar, size= 'md', isLoading}: Props) => {
       )
     } else {
       return (
-        <Skeleton circle={true} height={sizePX} width={sizePX} />
+        <SkeletonTheme baseColor="#E6EBF5">
+          <Skeleton circle={true} height={sizePX} width={sizePX} />
+        </SkeletonTheme>
       )
     }
   }
-  
-  
+
+
 
   if (avatar) {
     return (
-      <img src={avatar} alt={name+' avatar'}
+      <img src={avatar} alt={name + ' avatar'}
         className={`${calcSize()} rounded-full select-none cursor-pointer border-2 border-gray-300 dark:border-quaternary-blue`}
       />
     )

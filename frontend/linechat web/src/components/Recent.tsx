@@ -6,7 +6,7 @@ import { useUserStore } from '../stores/userStore';
 import ChatSelectSkeleton from './ChatSelectSkeleton';
 
 const Recent = () => {
-  const isOnline = useUserStore((state) => state.isOnline)
+  const userDetails = useUserStore((state) => state.UserDetails)
 
   return (
     <div>
@@ -18,7 +18,7 @@ const Recent = () => {
       <SimpleBar
         className={`w-full overflow-y-auto lg:h-[calc(100vh-267px)] h-[calc(100vh-calc(59px+267px))]`}
       >
-        {isOnline ? (
+        {userDetails ? (
           <>
             <UserChatSelect name='ilyas elaissi' status='online' message='Okay i will do it' time='02:45 PM' />
             <UserChatSelect name='darth vader' status='online' message='Okay my master' time='02:45 PM' avatar={avatar} />
@@ -30,7 +30,7 @@ const Recent = () => {
           </>
         ) : (
           <>
-            {Array(5).fill(0).map((_, i) => (
+            {Array(7).fill(0).map((_, i) => (
               <ChatSelectSkeleton key={i} />
             ))}
           </>

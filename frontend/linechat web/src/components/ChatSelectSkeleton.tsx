@@ -8,7 +8,7 @@ const ChatSelectSkeleton = () => {
   
   return (
     <div
-      className='px-5 py-[15px] border-t-primary border-t hover:bg-tertiary dark:hover:bg-sidebar-dark-primary lg:rounded-md cursor-pointer transition-all flex items-stretch justify-center dark:border-t-contact-dark-primary dark:hover:bg-sidebar-dark-tertiary'
+      className='px-5 py-[15px] border-t-primary border-t lg:rounded-md flex items-stretch justify-center dark:border-t-contact-dark-primary'
     >
       <div
         className='flex items-center justify-center mr-4'
@@ -21,12 +21,12 @@ const ChatSelectSkeleton = () => {
         className='flex-grow'
       >
         <h5>
-          <SkeletonTheme {...darkMode && {... {baseColor:"#3E4A56", highlightColor:"#36404A"}}}>
+          <SkeletonTheme {...darkMode ? {... {baseColor:"#3E4A56", highlightColor:"#36404A"}} : {... {baseColor:"#E6EBF5"}}}>
             <Skeleton width={100} />
           </SkeletonTheme>
         </h5>
         <p >
-          <SkeletonTheme {...darkMode && {... {baseColor:"#3E4A56", highlightColor:"#36404A"}}}>
+          <SkeletonTheme {...darkMode ? {... {baseColor:"#3E4A56", highlightColor:"#36404A"}} : {... {baseColor:"#E6EBF5"}}}>
             <Skeleton />
           </SkeletonTheme>
         </p>
@@ -37,7 +37,7 @@ const ChatSelectSkeleton = () => {
         <small
           className='mb-[2px] '
         >
-          <SkeletonTheme {...darkMode && {... {baseColor:"#3E4A56", highlightColor:"#36404A"}}}>
+          <SkeletonTheme {...darkMode ? {... {baseColor:"#3E4A56", highlightColor:"#36404A"}} : {... {baseColor:"#E6EBF5"}}}>
             <Skeleton width={20} />
           </SkeletonTheme>
         </small>
