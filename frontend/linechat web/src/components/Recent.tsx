@@ -89,6 +89,7 @@ const Recent = () => {
             {data?.map((conversation, _) => (
               <UserChatSelect
                 key={conversation.idConversation}
+                id={conversation.idConversation}
                 message={conversation.lastMessage}
                 name={conversation.fullName}
                 avatar={conversation.avatarUrl}
