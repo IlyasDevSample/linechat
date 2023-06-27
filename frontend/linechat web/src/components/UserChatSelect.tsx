@@ -9,6 +9,14 @@ type Props = {
   avatar?: string
   time: string
 }
+const MAX_CHARACTERS = 30;
+
+const truncateText = (text: string) => {
+  if (text.length > MAX_CHARACTERS) {
+    return text.slice(0, MAX_CHARACTERS) + '...';
+  }
+  return text;
+};
 
 const UserChatSelect = ({ name, status, message, time, avatar }: Props) => {
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
@@ -33,7 +41,7 @@ const UserChatSelect = ({ name, status, message, time, avatar }: Props) => {
           {name}
         </h5>
         <p className='dark:text-gray-2 dark:text-dark-gray text-[13px] dark:font-medium'>
-          {message}
+          {truncateText(message)}
         </p>
       </div>
       <div
