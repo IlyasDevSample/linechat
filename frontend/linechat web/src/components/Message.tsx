@@ -5,8 +5,9 @@ type Props = {
   fullName: string
   message: string
   showAvatar?: boolean
+  avatarURL?: string
 }
-const Message = ({ isUser = false, fullName, message, showAvatar }: Props) => {
+const Message = ({ isUser = false, fullName, message, showAvatar, avatarURL }: Props) => {
   return (
     <div
       className={`flex items-center ${isUser ? 'justify-end' : 'justify-start'} mt-2 mb-2`}
@@ -18,7 +19,7 @@ const Message = ({ isUser = false, fullName, message, showAvatar }: Props) => {
           className="flex justify-center items-end"
         >
           {
-            showAvatar ? <ProfileImg name={fullName} />
+            showAvatar ? <ProfileImg name={fullName} avatar={avatarURL} />
               :
               <div
                 className="w-8 h-8 ml-2"

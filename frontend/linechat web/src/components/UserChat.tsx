@@ -4,13 +4,16 @@ import UserInfoBar from "./UserInfoBar"
 import { useEffect, useRef, useState } from "react"
 import Message from "./Message"
 import SimpleBar from "simplebar-react"
-import { RiSendPlane2Fill } from 'react-icons/ri'
+import { RiLock2Line, RiSendPlane2Fill } from 'react-icons/ri'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { useUserSettingStore } from "../stores/userSettingStore"
 import { BsEmojiSmile } from 'react-icons/bs'
 import { IoIosAttach } from 'react-icons/io'
 import { useWindowSize } from 'usehooks-ts'
+import { useConversationStore } from "../stores/conversationStore"
+import { useUserStore } from "../stores/userStore"
+import brandLogo from '../assets/linechat_logo.png'
 
 
 const UserChat = () => {
@@ -22,14 +25,10 @@ const UserChat = () => {
   const [isEmojiOpen, setIsEmojiOpen] = useState(false)
   const [isCLickOutside, setIsClickOutside] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(true)
   const scrollToBottomRef = useRef<HTMLDivElement>(null)
-
-  const handleScrollTopBottom = () => {
-    if (scrollToBottomRef.current) {
-      scrollToBottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
-    }
-  }
+  const selectedConversation = useConversationStore((state) => state.selectedConversation)
+  const userDetails = useUserStore((state) => state.UserDetails)
 
   useEffect(() => {
     const handleResize = () => {
@@ -51,7 +50,11 @@ const UserChat = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [setIsChatOpen, isMobile, width])
 
-  const handleClickOutside = () => {
+  useEffect(() => {
+    handleScrollTopBottom()
+  }, [selectedConversation, isChatOpen])
+
+  const handleClickOutsideEmoji = () => {
     if (isEmojiOpen && isCLickOutside) {
       setIsEmojiOpen(false)
     } else {
@@ -59,34 +62,74 @@ const UserChat = () => {
     }
   }
 
+  const handleScrollTopBottom = () => {
+    if (scrollToBottomRef.current) {
+      scrollToBottomRef.current.scrollIntoView({ behavior: 'instant', block: 'end' })
+    }
+  }
+
+  if (selectedConversation === null || !userDetails) {
+    if (isMobile) return null
+    return (
+      <div
+        className={"flex flex-col justify-center items-center text-txt-dark dark:text-light-gray bg-white dark:bg-chat-dark-primary h-screen max-h-screen w-full overflow-hidden lg:shadow-primary-web fixed left-0 top-0 lg:visible lg:translate-x-0 lg:static transition-all duration-300 z-50"}
+      >
+        <div
+          className="flex flex-col justify-center items-center flex-grow"
+        >
+          <img
+            className="w-20 h-20 mb-4"
+            src={brandLogo} alt="LineChat" />
+          <h5
+            className="text-xl font-semibold text-gray-600 dark:text-light-gray"
+          >
+            LineChat for Web
+          </h5>
+          <p
+            className="text-gray-400 dark:text-dark-blue text-center mt-2 max-w-lg"
+          >
+            Start chatting with your friends and family on LineChat, send and receive messages, photos, videos, documents, and more!
+          </p>
+        </div>
+        <div
+          className="capitalize text-txt-light dark:text-dark-blue text-center mb-4 font-semibold text-gray-400 flex items-center justify-center"
+        >
+          <RiLock2Line className="mr-1 text-xl" />
+          <h6>
+          Secure and private messaging
+          </h6>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <AnimatePresence>
       {isChatOpen &&
         <motion.div
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '2000%' }}
-          transition={{ duration: 0.1 }}
+          {...isMobile && {
+            initial: { ...{ x: '100%' } },
+            animate: { ...{ x: 0 } },
+            exit: { ...{ x: '2000%' } },
+            transition: { ...{ duration: 0.1 } }
+          }}
           className={"text-txt-dark dark:text-light-gray bg-white dark:bg-chat-dark-primary h-screen max-h-screen w-full overflow-hidden lg:shadow-primary-web fixed left-0 top-0 lg:visible lg:translate-x-0 lg:static transition-all duration-300 z-50"}
         >
-          <UserInfoBar />
+          <UserInfoBar conversation={selectedConversation} />
           <SimpleBar
-            className={"w-full flex flex-col justify-end items-center h-[calc(100vh-4rem)] overflow-y-auto pt-[74px] px-4"}
+            className={"w-full flex flex-col h-[calc(100vh-4rem)] overflow-y-auto pt-[74px] px-4"}
           >
-            <Message message="Hi master" isUser fullName="ilyas" showAvatar />
-            <Message message="Hi master" fullName="darth vader" />
-            <Message message="i will do it" fullName="darth vader" />
-            <Message message="Okay my masterLorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate nemo repellat laboriosam optio facilis praesentium quam culpa cumque est, similique nulla, tempore quia quibusdam perspiciatis eaque hic consequatur, dicta illo. Voluptas ducimus optio labore voluptatum suscipit nulla reprehenderit aliquid nesciunt quae sed at ullam quo amet soluta tenetur, iure, enim cum consectetur quis laudantium dignissimos saepe quas est aliquam! Minus sequi magnam molestiae provident? Ullam veniam, voluptate, non nobis cum excepturi ea quos odit fugit a harum aspernatur temporibus ipsam maiores nisi voluptatem, vel quis praesentium. Placeat non itaque blanditiis, iste autem quos modi? Vel voluptatem cum possimus assumenda et!" fullName="darth vader" showAvatar />
-            <Message message="aliquid nesciunt quae sed at ullam quo amet soluta tenetur, iure, enim cum consectetur quis laudantium dignissimos saepe quas est aliquam! Minus sequi magnam molestiae provident? Ullam veniam, voluptate, non nobis cum excepturi ea quos odit fugit a harum aspernatur temporibus ipsam maiores nisi voluptatem, vel quis praesentium. Placeat non itaque blanditiis, iste autem quos modi? Vel voluptatem cum possimus assumenda et!" isUser fullName="ilyas" showAvatar />
-            <Message message="ok i will see" fullName="darth vader" showAvatar />
-            <Message message="Hi master" isUser fullName="ilyas" showAvatar />
-            <Message message="Hi master" fullName="darth vader" />
-            <Message message="i will do it" fullName="darth vader" />
-            <Message message="Okay my master" fullName="darth vader" showAvatar />
-            <Message message="done" isUser fullName="ilyas" showAvatar />
-            <Message message="Hi master" fullName="darth vader" />
-            <Message message="i will do it" fullName="darth vader" />
-            <Message message="Okay my master" fullName="darth vader" showAvatar />
+            {selectedConversation.messages.map((message, i) => (
+              <Message
+                key={message.createdAt}
+                fullName={message.sender === userDetails.username ? userDetails.fullName : selectedConversation.fullName}
+                message={message.message}
+                isUser={message.sender === userDetails.username}
+                // check after message is sent by the same user if true don't show avatar
+                showAvatar={i === selectedConversation.messages.length - 1 ? true : message.sender !== selectedConversation.messages[i + 1].sender}
+                avatarURL={message.sender === userDetails.username ? userDetails.AvatarUrl : selectedConversation.avatarUrl}
+              />
+            ))}
             <div ref={scrollToBottomRef}></div>
           </SimpleBar>
           <div
@@ -139,7 +182,7 @@ const UserChat = () => {
                     className={`absolute ${!isMobile ? 'right-0 bottom-[247px]' : 'right-[-45px] bottom-[247px]'} h-full flex items-center justify-center`}
                   >
                     <Picker
-                      onClickOutside={handleClickOutside}
+                      onClickOutside={handleClickOutsideEmoji}
                       onEmojiSelect={(emoji: any) => { setMessageText(messageText + emoji.native) }} data={data}
                       theme={darkMode ? 'dark' : 'light'}
                       autoFocus={inputRef.current?.focus()}

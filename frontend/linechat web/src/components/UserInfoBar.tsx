@@ -3,8 +3,13 @@ import UserStatus from "./UserStatus"
 import avatar from '../assets/avatar.png'
 import { RiMoreFill, RiPhoneLine, RiVidiconLine, RiArrowLeftSLine } from 'react-icons/ri'
 import { useLayoutStore } from "../stores/layoutStore"
+import { Conversation } from "../types/conversationType"
 
-const UserInfoBar = () => {
+type Props = {
+  conversation: Conversation
+}
+
+const UserInfoBar = ({ conversation }: Props) => {
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
 
   return (
@@ -21,7 +26,7 @@ const UserInfoBar = () => {
           className="w-fit"
         >
 
-          <ProfileImg name="darth vader" avatar={avatar} />
+          <ProfileImg name={conversation.fullName} avatar={conversation.avatarUrl && conversation.avatarUrl} />
         </div>
 
         <div
@@ -29,12 +34,15 @@ const UserInfoBar = () => {
         >
           <h4
             className="font-semibold"
-          >darth vader</h4>
+          >{conversation.fullName}
+          </h4>
           <small
             className="text-xs dark:text-light-gray flex items-center justify-start gap-1"
           >
-            <UserStatus status="online" block />
-            online
+            <UserStatus status={
+              conversation.status.toLowerCase() === 'online' ? 'online' : 'offline'
+            } block />
+            {conversation.status.toLowerCase()}
           </small>
         </div>
       </div>
