@@ -45,12 +45,12 @@ public class MessageController {
         return ResponseEntity.ok(messageResponseDTO);
     }
 
-    @GetMapping("/conversations/{username}")
-    public ResponseEntity<List<ConversationResponseDTO>> getConversations(@PathVariable String username) {
+    @GetMapping("/conversations")
+    public ResponseEntity<List<ConversationResponseDTO>> getConversations() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        if (!currentPrincipalName.equals(username)) {
-            throw new MessageException("You are not eligible to get those conversations");
+        String username = authentication.getName();
+        if (username == null) {
+            throw new MessageException("You are not legible to get conversations");
         }
         List<Conversation> conversations = messageService.getConversations(username);
         List<ConversationResponseDTO> conversationsResponse = new ArrayList<>();
