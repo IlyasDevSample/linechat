@@ -119,7 +119,7 @@ const UserChat = () => {
           <SimpleBar
             className={"w-full flex flex-col h-[calc(100vh-4rem)] overflow-y-auto pt-[74px] px-4"}
           >
-            {selectedConversation.messages.map((message, i) => (
+            {selectedConversation.messages?.map((message, i) => (
               <Message
                 key={message.createdAt}
                 fullName={message.sender === userDetails.username ? userDetails.fullName : selectedConversation.fullName}
