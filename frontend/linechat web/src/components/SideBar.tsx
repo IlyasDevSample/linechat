@@ -43,7 +43,7 @@ const SideBar = ({ fullName, avatarUrl, isLoading} : SideBarProps) => {
       <header
         className='hidden lg:flex justify-center items-center h-[75px] w-[75px] mb-1'
       >
-        <Link to='/dashboard'>
+        <Link to='/home'>
           <img src={brandLogo} alt="brand logo"
             className='h-[30px] w-[30px] mx-auto select-none'
           />
