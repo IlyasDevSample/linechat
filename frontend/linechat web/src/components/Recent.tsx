@@ -13,14 +13,14 @@ import { useConversationStore } from '../stores/conversationStore';
 const Recent = () => {
   const userDetails = useUserStore((state) => state.UserDetails)
   const bearerToken = useAuthStore((state) => state.bearerToken)
-  const { data, isLoading, error, refetch } = useConversationData(userDetails?.username as string, bearerToken as string, false)
+  const { data, isLoading, error, refetch } = useConversationData(bearerToken as string, false)
   const conversations = useConversationStore((state) => state.conversations)
   const setConversations = useConversationStore((state) => state.setConversations)
 
   useEffect(() => {
-    if (!bearerToken || !userDetails) return
+    if (!bearerToken) return
     refetch()
-  }, [refetch, bearerToken, userDetails])
+  }, [refetch, bearerToken])
 
   useEffect(() => {
     if (!data) return
