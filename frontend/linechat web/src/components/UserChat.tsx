@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useLayoutStore } from "../stores/layoutStore"
 import UserInfoBar from "./UserInfoBar"
 import { useEffect, useRef, useState } from "react"
-import Message from "./Message"
 import SimpleBar from "simplebar-react"
 import { RiLock2Line, RiSendPlane2Fill } from 'react-icons/ri'
 import data from '@emoji-mart/data'
@@ -14,6 +13,7 @@ import { useWindowSize } from 'usehooks-ts'
 import { useConversationStore } from "../stores/conversationStore"
 import { useUserStore } from "../stores/userStore"
 import brandLogo from '../assets/linechat_logo.png'
+import MessageBox from "./MessageBox"
 
 
 const UserChat = () => {
@@ -120,15 +120,13 @@ const UserChat = () => {
             className={"w-full flex flex-col h-[calc(100vh-4rem)] overflow-y-auto pt-[74px] px-4"}
           >
             {selectedConversation.messages?.map((message, i) => (
-              <Message
+              <MessageBox
                 key={message.createdAt}
-                fullName={message.sender === userDetails.username ? userDetails.fullName : selectedConversation.fullName}
-                message={message.message}
-                isUser={message.sender === userDetails.username}
-                // check after message is sent by the same user if true don't show avatar
-                showAvatar={i === selectedConversation.messages.length - 1 ? true : message.sender !== selectedConversation.messages[i + 1].sender}
-                avatarURL={message.sender === userDetails.username ? userDetails.AvatarUrl : selectedConversation.avatarUrl}
-              />
+                message={message}
+                userDetails={userDetails}
+                selectedConversation={selectedConversation}
+                position={i}
+                />
             ))}
             <div ref={scrollToBottomRef}></div>
           </SimpleBar>

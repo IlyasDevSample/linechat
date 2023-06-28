@@ -1,13 +1,21 @@
+import { Conversation, Message } from "../types/conversationType"
+import { UserDetails } from "../types/userDetailsType"
 import ProfileImg from "./ProfileImg"
 
 type Props = {
-  isUser?: boolean
-  fullName: string
-  message: string
-  showAvatar?: boolean
-  avatarURL?: string
+  message: Message,
+  userDetails: UserDetails,
+  selectedConversation: Conversation,
+  position: number
 }
-const Message = ({ isUser = false, fullName, message, showAvatar, avatarURL }: Props) => {
+
+const MessageBox = ({ message, userDetails, selectedConversation, position }: Props) => {
+
+  const isUser = message.sender === userDetails.username
+  const showAvatar = position === selectedConversation.messages.length - 1 ? true : message.sender !== selectedConversation.messages[position + 1].sender
+  const avatarURL = message.sender === userDetails.username ? userDetails.AvatarUrl : selectedConversation.avatarUrl
+  const fullName = message.sender === userDetails.username ? userDetails.fullName : selectedConversation.fullName
+
   return (
     <div
       className={`flex items-center ${isUser ? 'justify-end' : 'justify-start'} mt-2 mb-2`}
@@ -32,7 +40,7 @@ const Message = ({ isUser = false, fullName, message, showAvatar, avatarURL }: P
           <p
             className={`rounded-md text-sm p-2 px-3 ${isUser ? 'bg-quaternary-blue text-white ml-12 dark:bg-sidebar-dark-primary' : 'bg-gray-200 text-black mr-12 dark:bg-quaternary-dark-blue dark:text-light-gray'}`}
           >
-            {message}
+            {message.message}
           </p>
         </div>
       </div>
@@ -40,4 +48,4 @@ const Message = ({ isUser = false, fullName, message, showAvatar, avatarURL }: P
   )
 }
 
-export default Message
+export default MessageBox
