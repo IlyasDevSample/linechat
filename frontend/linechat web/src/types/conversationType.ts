@@ -17,4 +17,5 @@ export type Conversation = {
   avatarUrl: string
   messages: Message[]
   lastMessage: string
+  lastMessageTime: string
 }

@@ -24,6 +24,12 @@ const Recent = () => {
 
   useEffect(() => {
     if (!data) return
+    // sort by last message time
+    data.sort((a, b) => {
+      if (a.lastMessageTime > b.lastMessageTime) return -1
+      if (a.lastMessageTime < b.lastMessageTime) return 1
+      return 0
+    })
     setConversations(data)
   }, [data, setConversations])
 
@@ -102,7 +108,7 @@ const Recent = () => {
                 name={conversation.fullName}
                 avatar={conversation.avatarUrl}
                 status={conversation.status === 'ONLINE' ? 'online' : 'offline'}
-                time={format(new Date(conversation.createdAt), 'hh:mm a')}
+                time={format(new Date(conversation.lastMessageTime), 'hh:mm a')}
               />
             ))}
           </>
