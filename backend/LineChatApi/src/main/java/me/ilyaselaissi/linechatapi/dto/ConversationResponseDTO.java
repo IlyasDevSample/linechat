@@ -11,6 +11,7 @@ public record ConversationResponseDTO(
         String createdAt,
         String avatarUrl,
         List<MessageResponseDTO> messages,
-        String lastMessage
+        String lastMessage,
+        String lastMessageTime
         ) {
 }

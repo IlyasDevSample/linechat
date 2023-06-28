@@ -81,7 +81,8 @@ public class MessageController {
                     otherUser.getCreatedAt().toString(),
                     otherUser.getAvatar(),
                     messages,
-                    messages.get(messages.size() - 1).message()
+                    messages.get(messages.size() - 1).message(),
+                    messages.get(messages.size() - 1).createdAt()
             );
 
             conversationsResponse.add(conversationResponse);
