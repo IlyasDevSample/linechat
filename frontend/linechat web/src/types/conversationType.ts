@@ -1,5 +1,6 @@
 export type Message = {
   idMessage: string
+  idConversation: string
   sender: string
   receiver: string
   message: string

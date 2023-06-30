@@ -36,6 +36,7 @@ public class MessageController {
         Message message = messageService.saveUserMessage(messageDTO);
         MessageResponseDTO messageResponseDTO = new MessageResponseDTO(
                 message.getId().toString(),
+                message.getConversation().getId().toString(),
                 message.getSender().getUsername(),
                 message.getReceiver().getUsername(),
                 message.getText(),
@@ -65,6 +66,7 @@ public class MessageController {
             List<MessageResponseDTO> messages = conversation.getMessages().stream()
                     .map(message -> new MessageResponseDTO(
                             message.getId().toString(),
+                            message.getConversation().getId().toString(),
                             message.getSender().getUsername(),
                             message.getReceiver().getUsername(),
                             message.getText(),
