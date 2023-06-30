@@ -23,7 +23,7 @@ const HomeLayout = () => {
   const userDetails = useUserStore((state) => state.UserDetails)
   const isOnline = useUserStore((state) => state.isOnline)
   const setIsOnline = useUserStore((state) => state.setIsOnline)
-  
+
   useEffect(() => {
     if (!bearerToken) return;
     axios.get<UserDetails>(import.meta.env.VITE_API_URL+"/profile/details",
@@ -63,13 +63,19 @@ const HomeLayout = () => {
 
   useEffect(() => {
     if (!userDetails || !client?.connected) return;
-    if (Object.keys(client?.subscriptions).length > 0) return;
-    client.subscribe("/topic/user/"+userDetails?.username, (message) => {
-      console.log("message received");
+    if (Object.keys(client?.subscriptions).length > 0) return
+
+    client.subscribe("/user/"+userDetails?.username+"/queue/private", (message) => {
+      console.log("message received")
     })
 
+    client.subscribe("/user/"+userDetails?.username+"/queue/errors", (message) => {
+      console.log("Error: " + message.body)
+    });
+
     return () => {
-      client.unsubscribe("/topic/user/"+userDetails?.username);
+      client.unsubscribe("/user/"+userDetails?.username+"/queue/private")
+      client.unsubscribe("/user/"+userDetails?.username+"/queue/errors")
       setIsOnline(false);
     }
   }, [client, userDetails, isConnected, setIsOnline])
@@ -94,7 +100,7 @@ const HomeLayout = () => {
         className='flex flex-row w-full overflow-hidden'
         onClick={() => {
           client?.send("/app/send", {}, JSON.stringify({
-            sender: "test",
+            sender: "eiliass171@gmail.com",
             receiver: "elaissiilyas@gmail.com",
             message: "Hello"
           }));
