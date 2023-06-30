@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.security.Principal;
+
 @Component
 public class WebsocketEventListener {
     @EventListener
@@ -19,8 +21,10 @@ public class WebsocketEventListener {
         StompHeaderAccessor stompHeaderAccessor = MessageHeaderAccessor.getAccessor(
                 (Message<?>) headerAccessor.getHeader("simpConnectMessage"),
                 StompHeaderAccessor.class);
-//        String jwtBearer = stompHeaderAccessor.getNativeHeader("jwt-bearer").get(0);
-//        System.out.println(jwtBearer);
+        Principal principal = stompHeaderAccessor.getUser();
+        String sessionId = stompHeaderAccessor.getSessionId();
+        stompHeaderAccessor.getSessionAttributes().put(sessionId, principal);
+        System.out.println("Received a new web socket connection: " + principal.getName()+" "+sessionId);
 
 
     }
