@@ -24,6 +24,9 @@ const UserChatSelect = ({ name, status, message, time, avatar, id }: Props) => {
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
   const conversations = useConversationStore((state) => state.conversations)
   const setSelectedConversation = useConversationStore((state) => state.setSelectedConversation)
+  const selectedConversation = useConversationStore((state) => state.selectedConversation)
+
+  const isActive = selectedConversation?.idConversation === id
   
   const handleClick = () => {
     setIsChatOpen(true)
@@ -36,7 +39,7 @@ const UserChatSelect = ({ name, status, message, time, avatar, id }: Props) => {
   return (
     <div
       onClick={handleClick}
-      className='px-5 py-[15px] border-t-primary border-t hover:bg-tertiary dark:hover:bg-sidebar-dark-primary lg:rounded-md cursor-pointer transition-all flex items-stretch justify-center dark:border-t-contact-dark-primary dark:hover:bg-sidebar-dark-tertiary dark:text-dark-gray'
+      className={'px-5 py-[15px] border-t-primary border-t hover:bg-tertiary dark:hover:bg-sidebar-dark-primary lg:rounded-md cursor-pointer transition-all flex items-stretch justify-center dark:border-t-contact-dark-primary dark:hover:bg-sidebar-dark-tertiary dark:text-dark-gray' + (isActive ? ' bg-slate-200 dark:bg-sidebar-dark-primary' : '')}
     >
       <div
         className='flex items-center justify-center mr-4'
