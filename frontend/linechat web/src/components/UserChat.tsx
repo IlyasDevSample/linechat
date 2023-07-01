@@ -14,6 +14,8 @@ import { useConversationStore } from "../stores/conversationStore"
 import { useUserStore } from "../stores/userStore"
 import brandLogo from '../assets/linechat_logo.png'
 import MessageBox from "./MessageBox"
+import { useClientStore } from "../stores/clientStore"
+import { Message } from "../types/conversationType"
 
 
 const UserChat = () => {
@@ -29,6 +31,11 @@ const UserChat = () => {
   const scrollToBottomRef = useRef<HTMLDivElement>(null)
   const selectedConversation = useConversationStore((state) => state.selectedConversation)
   const userDetails = useUserStore((state) => state.UserDetails)
+  const isOnline = useUserStore((state) => state.isOnline)
+  const client = useClientStore((state) => state.client)
+  const conversations = useConversationStore((state) => state.conversations)
+  const setConversations = useConversationStore((state) => state.setConversations)
+  const setSelectedConversation = useConversationStore((state) => state.setSelectedConversation)
 
   useEffect(() => {
     const handleResize = () => {
@@ -65,6 +72,59 @@ const UserChat = () => {
   const handleScrollTopBottom = () => {
     if (scrollToBottomRef.current) {
       scrollToBottomRef.current.scrollIntoView({ behavior: 'instant', block: 'end' })
+    }
+  }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (messageText.trim() === '') return
+    if (selectedConversation && isOnline && client && userDetails) {
+      const message = {
+        sender: userDetails.username,
+        receiver: selectedConversation.username,
+        message: messageText,
+      }
+      client?.send("/app/send", {}, JSON.stringify(message));
+      setMessageText('')
+      // adding message to conversation store
+      const localMessage: Message = {
+        idMessage: Math.random().toString(),
+        message: message.message,
+        sender: message.sender,
+        receiver: message.receiver,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        idConversation: selectedConversation.idConversation,
+        status: 'PENDING'
+      }
+      const newConversations = conversations?.map(conversation => {
+        if (conversation.idConversation === selectedConversation.idConversation) {
+          return {
+            ...conversation,
+            messages: [...conversation.messages, localMessage],
+            lastMessage: localMessage.message,
+            lastMessageTime: localMessage.createdAt
+          }
+        }
+        return conversation
+      })
+      if (newConversations) {
+        setConversations([...newConversations.sort((a, b) => {
+          if (a.lastMessageTime > b.lastMessageTime) return -1
+          if (a.lastMessageTime < b.lastMessageTime) return 1
+          return 0
+        })]);
+        setSelectedConversation({
+          ...selectedConversation,
+          messages: [...selectedConversation.messages, localMessage],
+          lastMessage: localMessage.message,
+          lastMessageTime: localMessage.createdAt
+        })
+      }
+      
+      
+      setTimeout(() => {
+        handleScrollTopBottom()
+      }, 100)
     }
   }
 
@@ -121,7 +181,7 @@ const UserChat = () => {
           >
             {selectedConversation.messages?.map((message, i) => (
               <MessageBox
-                key={message.createdAt}
+                key={message.idMessage}
                 message={message}
                 userDetails={userDetails}
                 selectedConversation={selectedConversation}
@@ -136,6 +196,7 @@ const UserChat = () => {
             <form
               autoComplete="off"
               noValidate
+              onSubmit={handleSubmit}
               className='flex justify-center items-center bg-tertiary dark:bg-sidebar-dark-primary dark:text-dark-blue rounded-md w-full'
             >
               <input type="search"
