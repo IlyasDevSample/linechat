@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,7 @@ public class MessageController {
                 message.getReceiver().getUsername(),
                 message.getText(),
                 message.getMessageStatus().getStatus(),
-                message.getCreatedAt().toString(),
+                message.getCreatedAt().toGMTString(),
                 message.getUpdatedAt().toString()
         );
         return ResponseEntity.ok(messageResponseDTO);
@@ -63,7 +64,7 @@ public class MessageController {
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("Other user not found"));
 
-            List<MessageResponseDTO> messages = conversation.getMessages().stream()
+            List<MessageResponseDTO> messages = new ArrayList<>(conversation.getMessages().stream()
                     .map(message -> new MessageResponseDTO(
                             message.getId().toString(),
                             message.getConversation().getId().toString(),
@@ -74,8 +75,9 @@ public class MessageController {
                             message.getCreatedAt().toString(),
                             message.getUpdatedAt().toString()
                     ))
-                    .toList();
-
+                    .toList());
+            // sort messages by createdAt
+            messages.sort(Comparator.comparing(MessageResponseDTO::createdAt));
             ConversationResponseDTO conversationResponse = new ConversationResponseDTO(
                     conversation.getId().toString(),
                     otherUser.getUsername(),
