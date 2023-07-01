@@ -44,7 +44,11 @@ const HomeLayout = () => {
       }
     })
     if (!conversations) return;
-    setConversations([...conversations])
+    setConversations([...conversations.sort((a, b) => {
+      if (a.lastMessageTime > b.lastMessageTime) return -1
+      if (a.lastMessageTime < b.lastMessageTime) return 1
+      return 0
+    })])
     if (selectedConversation?.idConversation === messageReceived.idConversation) {
       setSelectedConversation(conversations.find((conversation) => conversation.idConversation === messageReceived.idConversation) ?? selectedConversation)
     }
