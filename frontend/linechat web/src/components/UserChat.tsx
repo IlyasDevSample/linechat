@@ -16,6 +16,7 @@ import brandLogo from '../assets/linechat_logo.png'
 import MessageBox from "./MessageBox"
 import { useClientStore } from "../stores/clientStore"
 import { Message } from "../types/conversationType"
+import axios from "axios"
 
 
 const UserChat = () => {
@@ -33,9 +34,6 @@ const UserChat = () => {
   const userDetails = useUserStore((state) => state.UserDetails)
   const isOnline = useUserStore((state) => state.isOnline)
   const client = useClientStore((state) => state.client)
-  const conversations = useConversationStore((state) => state.conversations)
-  const setConversations = useConversationStore((state) => state.setConversations)
-  const setSelectedConversation = useConversationStore((state) => state.setSelectedConversation)
 
   useEffect(() => {
     const handleResize = () => {
@@ -86,46 +84,6 @@ const UserChat = () => {
       }
       client?.send("/app/send", {}, JSON.stringify(message));
       setMessageText('')
-      // adding message to conversation store
-      // const localMessage: Message = {
-      //   idMessage: Math.random().toString(),
-      //   message: message.message,
-      //   sender: message.sender,
-      //   receiver: message.receiver,
-      //   createdAt: new Date().toISOString(),
-      //   updatedAt: new Date().toISOString(),
-      //   idConversation: selectedConversation.idConversation,
-      //   status: 'PENDING'
-      // }
-      // const newConversations = conversations?.map(conversation => {
-      //   if (conversation.idConversation === selectedConversation.idConversation) {
-      //     return {
-      //       ...conversation,
-      //       messages: [...conversation.messages, localMessage],
-      //       lastMessage: localMessage.message,
-      //       lastMessageTime: localMessage.createdAt
-      //     }
-      //   }
-      //   return conversation
-      // })
-      // if (newConversations) {
-      //   setConversations([...newConversations.sort((a, b) => {
-      //     if (a.lastMessageTime > b.lastMessageTime) return -1
-      //     if (a.lastMessageTime < b.lastMessageTime) return 1
-      //     return 0
-      //   })]);
-      //   setSelectedConversation({
-      //     ...selectedConversation,
-      //     messages: [...selectedConversation.messages, localMessage],
-      //     lastMessage: localMessage.message,
-      //     lastMessageTime: localMessage.createdAt
-      //   })
-      // }
-      
-      
-      // setTimeout(() => {
-      //   handleScrollTopBottom()
-      // }, 100)
     }
   }
 
