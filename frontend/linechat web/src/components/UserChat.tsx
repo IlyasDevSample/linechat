@@ -15,8 +15,6 @@ import { useUserStore } from "../stores/userStore"
 import brandLogo from '../assets/linechat_logo.png'
 import MessageBox from "./MessageBox"
 import { useClientStore } from "../stores/clientStore"
-import { Message } from "../types/conversationType"
-import axios from "axios"
 
 
 const UserChat = () => {
