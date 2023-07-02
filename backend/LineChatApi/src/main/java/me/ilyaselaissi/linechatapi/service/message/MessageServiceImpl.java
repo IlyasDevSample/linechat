@@ -1,5 +1,6 @@
 package me.ilyaselaissi.linechatapi.service.message;
 
+import jakarta.transaction.Transactional;
 import me.ilyaselaissi.linechatapi.common.MessageStatusNames;
 import me.ilyaselaissi.linechatapi.dto.MessageRequestDTO;
 import me.ilyaselaissi.linechatapi.exceptions.core.InvalidFieldException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final ConversationRepository conversationRepository;

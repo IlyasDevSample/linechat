@@ -1,5 +1,6 @@
 package me.ilyaselaissi.linechatapi.controller;
 
+import jakarta.transaction.Transactional;
 import me.ilyaselaissi.linechatapi.dto.MessageRequestDTO;
 import me.ilyaselaissi.linechatapi.dto.MessageResponseDTO;
 import me.ilyaselaissi.linechatapi.model.Message;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.UUID.randomUUID;
+
 @RestController
+@Transactional
 public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
     private final MessageService messageService;
-
     public ChatController(SimpMessagingTemplate messagingTemplate, MessageService messageService) {
         this.messagingTemplate = messagingTemplate;
         this.messageService = messageService;
@@ -34,24 +37,28 @@ public class ChatController {
         Principal principal = (Principal) headerAccessor.getSessionAttributes().get(sessionId);
 
         if (!principal.getName().equals(messageDTO.sender())) {
-            String errorMessage = "You are not legible to send this message";
+            String errorMessage = "You are not eligible to send this message";
             messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/errors", errorMessage);
             return;
         }
+
         try {
-            Message message = messageService.saveUserMessage(messageDTO);
+
             MessageResponseDTO messageResponseDTO = new MessageResponseDTO(
-                    message.getId().toString(),
-                    message.getConversation().getId().toString(),
-                    message.getSender().getUsername(),
-                    message.getReceiver().getUsername(),
-                    message.getText(),
-                    message.getMessageStatus().getStatus(),
-                    message.getCreatedAt().toGMTString(),
-                    message.getUpdatedAt().toGMTString()
+                    randomUUID().toString(),
+                    messageDTO.conversationId(),
+                    messageDTO.sender(),
+                    messageDTO.receiver(),
+                    messageDTO.message(),
+                    "PENDING",
+                    new java.util.Date().toGMTString(),
+                    new java.util.Date().toGMTString()
             );
             messagingTemplate.convertAndSendToUser(messageDTO.receiver(), "/queue/private", messageResponseDTO);
-        }catch (Exception e){
+            messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/private", messageResponseDTO);
+            messageService.saveUserMessage(messageDTO);
+
+        } catch (Exception e) {
             messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/errors", e.getMessage());
         }
     }
