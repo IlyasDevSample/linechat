@@ -3,7 +3,6 @@ package me.ilyaselaissi.linechatapi.controller;
 import jakarta.transaction.Transactional;
 import me.ilyaselaissi.linechatapi.dto.MessageRequestDTO;
 import me.ilyaselaissi.linechatapi.dto.MessageResponseDTO;
-import me.ilyaselaissi.linechatapi.model.Message;
 import me.ilyaselaissi.linechatapi.service.message.MessageService;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,7 +12,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.UUID.randomUUID;
 
@@ -57,7 +55,6 @@ public class ChatController {
             messagingTemplate.convertAndSendToUser(messageDTO.receiver(), "/queue/private", messageResponseDTO);
             messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/private", messageResponseDTO);
             messageService.saveUserMessage(messageDTO);
-
         } catch (Exception e) {
             messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/errors", e.getMessage());
         }
