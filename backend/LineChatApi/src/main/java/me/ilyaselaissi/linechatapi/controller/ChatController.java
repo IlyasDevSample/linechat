@@ -3,6 +3,7 @@ package me.ilyaselaissi.linechatapi.controller;
 import jakarta.transaction.Transactional;
 import me.ilyaselaissi.linechatapi.dto.MessageRequestDTO;
 import me.ilyaselaissi.linechatapi.dto.MessageResponseDTO;
+import me.ilyaselaissi.linechatapi.model.Message;
 import me.ilyaselaissi.linechatapi.service.message.MessageService;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -41,20 +42,19 @@ public class ChatController {
         }
 
         try {
-
+            Message msgSaved = messageService.saveUserMessage(messageDTO);
             MessageResponseDTO messageResponseDTO = new MessageResponseDTO(
-                    randomUUID().toString(),
-                    messageDTO.conversationId(),
-                    messageDTO.sender(),
-                    messageDTO.receiver(),
-                    messageDTO.message(),
-                    "PENDING",
-                    new java.util.Date().toGMTString(),
-                    new java.util.Date().toGMTString()
+                    msgSaved.getId().toString(),
+                    msgSaved.getConversation().getId().toString(),
+                    msgSaved.getSender().getUsername(),
+                    msgSaved.getReceiver().getUsername(),
+                    msgSaved.getText(),
+                    msgSaved.getMessageStatus().getStatus(),
+                    msgSaved.getCreatedAt().toGMTString(),
+                    msgSaved.getUpdatedAt().toGMTString()
             );
             messagingTemplate.convertAndSendToUser(messageDTO.receiver(), "/queue/private", messageResponseDTO);
             messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/private", messageResponseDTO);
-            messageService.saveUserMessage(messageDTO);
         } catch (Exception e) {
             messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/errors", e.getMessage());
         }
