@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -48,6 +49,11 @@ public class UserServiceImpl implements UserService {
         this.permissionRepository = permissionRepository;
         this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public List<User> getAllPeople() {
+        return userRepository.findAll();
     }
 
     @Override

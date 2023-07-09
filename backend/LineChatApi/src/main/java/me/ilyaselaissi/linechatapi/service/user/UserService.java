@@ -5,6 +5,8 @@ import me.ilyaselaissi.linechatapi.dto.ResetPasswordDTO;
 import me.ilyaselaissi.linechatapi.dto.UserDTO;
 import me.ilyaselaissi.linechatapi.model.User;
 
+import java.util.List;
+
 public interface UserService {
     User register(UserDTO userDTO);
 
@@ -19,4 +21,6 @@ public interface UserService {
     void resetPassword(ResetPasswordDTO resetPasswordDTO);
 
     User getUserDetails(String currentPrincipalName);
+
+    List<User> getAllPeople();
 }
