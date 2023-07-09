@@ -16,6 +16,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useConversationStore } from '../stores/conversationStore'
 import { Message } from '../types/conversationType'
+import { useSignOut } from '../hooks/useSignOut'
 
 const HomeLayout = () => {
   useTitle()
@@ -33,6 +34,7 @@ const HomeLayout = () => {
   const setConversations = useConversationStore((state) => state.setConversations)
   const setSelectedConversation = useConversationStore((state) => state.setSelectedConversation)
   const [messageReceived, setMessageReceived] = useState<Message | null>(null)
+  const signOut = useSignOut()
 
   useEffect(() => {
     if (!messageReceived) return;
@@ -66,6 +68,10 @@ const HomeLayout = () => {
         setUserDetails(response.data);
       }).catch((error) => {
         console.log(error);
+        // check 401 and redirect to login
+        if (error?.response?.status === 401) {
+          signOut();
+        }
       })
 
     function onConnect() {
