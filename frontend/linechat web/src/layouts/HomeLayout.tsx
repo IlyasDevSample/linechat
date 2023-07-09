@@ -34,6 +34,7 @@ const HomeLayout = () => {
   const setConversations = useConversationStore((state) => state.setConversations)
   const setSelectedConversation = useConversationStore((state) => state.setSelectedConversation)
   const [messageReceived, setMessageReceived] = useState<Message | null>(null)
+  const [ refreshView, setRefreshView ] = useState(false)
   const signOut = useSignOut()
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const HomeLayout = () => {
       setSelectedConversation(conversations.find((conversation) => conversation.idConversation === messageReceived.idConversation) ?? selectedConversation)
     }
     setMessageReceived(null)
+    setRefreshView(!refreshView)
   }, [messageReceived])
 
   useEffect(() => {
@@ -157,7 +159,7 @@ const HomeLayout = () => {
             <Outlet />
           </AnimatePresence>
         </div>
-        <UserChat />
+        <UserChat refreshView={refreshView} />
       </main>
       <ToastContainer />
     </div>

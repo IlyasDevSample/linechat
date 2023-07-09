@@ -16,8 +16,11 @@ import brandLogo from '../assets/linechat_logo.png'
 import MessageBox from "./MessageBox"
 import { useClientStore } from "../stores/clientStore"
 
+type UserChatProps = {
+  refreshView: boolean
+}
 
-const UserChat = () => {
+const UserChat = ({ refreshView }: UserChatProps) => {
   const { width } = useWindowSize()
   const isChatOpen = useLayoutStore(state => state.isChatOpen)
   const setIsChatOpen = useLayoutStore(state => state.setIsChatOpen)
@@ -32,6 +35,10 @@ const UserChat = () => {
   const userDetails = useUserStore((state) => state.UserDetails)
   const isOnline = useUserStore((state) => state.isOnline)
   const client = useClientStore((state) => state.client)
+
+  useEffect(() => {
+    handleScrollTopBottom()
+  }, [refreshView])
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,6 +77,7 @@ const UserChat = () => {
       scrollToBottomRef.current.scrollIntoView({ behavior: 'instant', block: 'end' })
     }
   }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (messageText.trim() === '') return
